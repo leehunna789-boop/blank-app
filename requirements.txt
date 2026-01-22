@@ -1,3 +1,5 @@
 streamlit
-pip install Pillow
-pip install pyinstaller
+pip install 
+Pillow
+pip install 
+pyinstaller
