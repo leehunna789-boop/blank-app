@@ -17,7 +17,7 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-st.title("S.S.S Music 6D")
+st.title("Music 6D อยู่นิ้งๆไม่เจ็บตัว")
 st.write('สโลแกน: "อยู่นิ่งๆ ไม่เจ็บตัว"')
 # 2. คาถา CSS ล็อกพิกัด (บังคับรูปอยู่ข้างในเท่านั้น)
 st.markdown("""
