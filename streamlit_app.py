@@ -11,7 +11,7 @@ st.markdown("""
     <style>
     .stApp { background-color: #050505; color: white; }
     .stButton>button { 
-        background-color: #0D0208; color: white; border-radius: 10px; 
+        background-color: #050505; color: white; border-radius: 10px; 
         height: 60px; font-weight: bold; border: 2px solid #FFD700;
     }
     </style>
@@ -29,7 +29,7 @@ st.markdown("""
     .tv-box {
         border: 15px solid #050505;
         border-right: 15px solid #0000FF;
-        border-bottom: 15px solid #0D0208;
+        border-bottom: 15px solid #050505;
         border-radius: 40px;
         width: 100%;
         height: 350px;
