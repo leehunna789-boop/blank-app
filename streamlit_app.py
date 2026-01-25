@@ -11,14 +11,14 @@ st.markdown("""
     <style>
     .stApp { background-color: #050505; color: white; }
     .stButton>button { 
-        background-color: #050505; color: white; border-radius: 10px; 
+        background-color: #FF0000; color: white; border-radius: 10px; 
         height: 60px; font-weight: bold; border: 2px solid #FFD700;
     }
     </style>
     """, unsafe_allow_html=True)
 
 st.title("Music 6D อยู่นิ้งๆไม่เจ็บตัว")
-st.write('สโลแกน: "หลากหลายแนวเพลง"')
+st.write('สโลแกน: "อยู่นิ่งๆ ไม่เจ็บตัว"')
 # 2. คาถา CSS ล็อกพิกัด (บังคับรูปอยู่ข้างในเท่านั้น)
 st.markdown("""
     <style>
@@ -27,19 +27,19 @@ st.markdown("""
     
     /* สร้างกรอบทีวี */
     .tv-box {
-        border: 15px solid #050505;
+        border: 15px solid #FF0000;
         border-right: 15px solid #0000FF;
-        border-bottom: 15px solid #050505;
+        border-bottom: 15px solid #0000FF;
         border-radius: 40px;
         width: 100%;
         height: 350px;
-        background-color: #000;
+        background-color: #111;
         margin-bottom: 20px;
         display: flex;
         align-items: center;
         justify-content: center;
         overflow: hidden;
-        box-shadow: 0 0 30px #050505;
+        box-shadow: 0 0 30px #FF0000;
     }
 
     /* บังคับรูปในกรอบ */
@@ -55,7 +55,7 @@ st.markdown("""
         border: 2px solid #0000FF;
         border-radius: 10px;
         padding: 10px;
-        color: #050505;
+        color: #FF0000;
         font-size: 24px;
         font-weight: bold;
         text-align: center;
@@ -82,7 +82,7 @@ st.markdown('<div class="run-text"><marquee scrollamount="10">อยู่นิ
 # --- 5. ส่วนของเพื่อน (รูปจะอยู่ล่างสุดจริงๆ) ---
 st.write("---")
 st.subheader("📸 มุมเพื่อนโชว์รูป")
-friend_files = st.file_uploader("ส่งรูปมาโชว์ตรงนี้", type=['jpg','png','jpeg'], accept_multiple_files=True)
+friend_files = st.file_uploader("globe.jpg", type=['jpg','png','jpeg'], accept_multiple_files=True)
 
 if friend_files:
     for f in friend_files:
