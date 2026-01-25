@@ -1,7 +1,30 @@
 import streamlit as st
 import os
 import base64
+import streamlit as st
 
+# --- โค้ด HTML สำหรับเครื่องเล่นเพลง Autoplay + Loop ---
+audio_url = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" # ลิงก์เพลงของลูกพี่
+
+st.markdown(f"""
+    <div style="background: #1A0000; padding: 20px; border-radius: 15px; border: 1px solid #FF0000;">
+        <p style="color: #FFD700; font-size: 14px; margin-bottom: 10px; text-align: center;">
+            🔊 6D MATRIX SYSTEM: CONTINUOUS MODE
+        </p>
+        <audio controls autoplay loop style="width: 100%; filter: invert(1); opacity: 0.8;">
+            <source src="{audio_url}" type="audio/mp3">
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+    
+    <script>
+        // โค้ดพยายามสั่งให้เพลงเล่นอัตโนมัติ (ขึ้นอยู่กับนโยบายของบราวเซอร์ลูกพี่ด้วย)
+        var audio = document.querySelector('audio');
+        audio.play();
+    </script>
+""", unsafe_allow_html=True)
+
+st.info("💡 หมายเหตุ: บางบราวเซอร์ (เช่น Chrome) อาจจะบล็อก Autoplay ถ้าลูกพี่ยังไม่ได้คลิกอะไรบนหน้าจอเลย ดังนั้นพอกดเข้าเว็บมาแล้ว คลิกตรงไหนก็ได้ทีนึง เพลงจะบรรเลงยาวๆ เลยครับ!")
 # 1. ตั้งค่าหน้าจอ
 st.set_page_config(page_title="MUSIC 6D PRO", layout="wide", initial_sidebar_state="collapsed")
 # --- 2. แต่งหน้าตาให้เท่ (UI) ---
