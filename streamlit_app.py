@@ -1,115 +1,96 @@
 import streamlit as st
 import base64
 
-# 1. ตั้งค่าหน้าจอ
+# 1. ตั้งค่าหน้าจอและซ่อนส่วนเกิน
 st.set_page_config(page_title="MUSIC 6D PRO", layout="wide", initial_sidebar_state="collapsed")
 
-# 2. CSS สายโหด (เน้นขอบหนาและไฟกะพริบ)
 st.markdown("""
     <style>
     .stApp { background-color: #000; color: #fff; }
     header, footer, [data-testid="stToolbar"] {display:none !important;}
     
-    /* กรอบสี่เหลี่ยมด้านบน */
+    /* กรอบสี่เหลี่ยมด้านบนสำหรับใส่รูปปก */
     .top-frame {
-        border: 10px solid #FF0000;
+        border: 12px solid #FF0000;
         border-right-color: #0000FF;
         border-bottom-color: #0000FF;
-        border-radius: 30px;
-        padding: 20px;
+        border-radius: 35px;
+        padding: 10px;
         text-align: center;
         background: #000;
-        box-shadow: 0 0 20px #FF0000;
-        min-height: 350px;
+        box-shadow: 0 0 25px #FF0000;
+        margin-bottom: 20px;
         display: flex;
-        flex-direction: column;
         align-items: center;
         justify-content: center;
-    }
-
-    /* รูปปกในกรอบ */
-    .cover-img {
-        width: 200px;
-        height: 200px;
-        border: 5px solid #fff;
-        border-radius: 20px;
-        object-fit: cover;
-        box-shadow: 0 0 15px #0000FF;
-        margin-bottom: 15px;
-    }
-
-    /* ตัวหนังสือวิ่ง */
-    .marquee {
-        width: 100%;
         overflow: hidden;
-        white-space: nowrap;
+        min-height: 300px;
+    }
+
+    /* รูปปกในกรอบปรับให้พอดี */
+    .cover-fit {
+        max-width: 100%;
+        max-height: 280px;
+        border-radius: 20px;
+        box-shadow: 0 0 15px #0000FF;
+    }
+
+    /* ตัวหนังสือวิ่งสโลแกน */
+    .marquee-style {
         color: #FF0000;
-        font-size: 24px;
+        font-size: 26px;
         font-weight: bold;
         text-shadow: 0 0 10px #FF0000;
-    }
-    .marquee span {
-        display: inline-block;
-        padding-left: 100%;
-        animation: marquee 10s linear infinite;
-    }
-    @keyframes marquee {
-        0%   { transform: translate(0, 0); }
-        100% { transform: translate(-100%, 0); }
+        background: #111;
+        padding: 10px;
+        border-radius: 10px;
+        border: 2px solid #0000FF;
     }
 
-    /* ไฟกะพริบด้านล่าง */
-    .led-bar {
-        display: flex;
-        justify-content: center;
-        gap: 5px;
-        margin-top: 10px;
-    }
-    .led {
-        width: 20px; height: 10px;
-        background: #FF0000;
-        animation: blink 0.5s infinite alternate;
-    }
-    @keyframes blink { from { opacity: 0.2; } to { opacity: 1; } }
+    /* ไฟกะพริบ */
+    .led-container { display: flex; justify-content: center; gap: 8px; margin-top: 15px; }
+    .led-bulb { width: 30px; height: 12px; border-radius: 5px; background: #FF0000; animation: blinker 0.6s infinite alternate; }
+    @keyframes blinker { from { opacity: 0.3; } to { opacity: 1; } }
     </style>
     """, unsafe_allow_html=True)
 
-# --- เริ่มแสดงผล ---
+# --- ส่วนการจัดการไฟล์ ---
+st.write("### ➕ ตั้งค่าเครื่องเล่น")
+c1, c2 = st.columns(2)
+with c1:
+    uploaded_songs = st.file_uploader("🎵 อัปโหลดเพลง (หลายเพลงได้)", type=['mp3'], accept_multiple_files=True)
+with c2:
+    uploaded_cover = st.file_uploader("🖼️ อัปโหลดรูปปก", type=['jpg','png','jpeg'])
 
-# ส่วนอัปโหลด (ย้ายมาไว้ข้างบนเพื่อให้ใช้งานง่าย)
-up1, up2 = st.columns(2)
-with up1:
-    songs = st.file_uploader("🎵 เลือกเพลง", type=['mp3'], accept_multiple_files=True)
-with up2:
-    cover = st.file_uploader("🖼️ เลือกรูปปก", type=['jpg','png','jpeg'])
-
-# 3. กรอบสี่เหลี่ยมด้านบน (ที่ลูกพี่อยากให้รูปไปอยู่)
+# --- ส่วนแสดงผลในกรอบ (ย้ายรูปปกมานี่) ---
 st.markdown('<div class="top-frame">', unsafe_allow_html=True)
-
-if cover:
-    # แปลงรูปเป็น Base64 เพื่อแสดงใน HTML
-    img_data = base64.b64encode(cover.read()).decode()
-    st.markdown(f'<img src="data:image/png;base64,{img_data}" class="cover-img">', unsafe_allow_html=True)
+if uploaded_cover:
+    # แสดงรูปปกที่อัปโหลด
+    img_base64 = base64.b64encode(uploaded_cover.read()).decode()
+    st.markdown(f'<img src="data:image/png;base64,{img_base64}" class="cover-fit">', unsafe_allow_html=True)
 else:
-    # ถ้ายังไม่อัปรูป ให้โชว์ข้อความรอ
-    st.markdown('<div style="width:200px; height:200px; border:5px dashed #555; border-radius:20px; display:flex; align-items:center; justify-content:center; margin-bottom:15px;">รอรูปปก...</div>', unsafe_allow_html=True)
-
-st.write("## MUSIC 6D อยู่นิ้งๆไม่เจ็บตัว")
-
-# ตัวหนังสือวิ่งสโลแกน
-st.markdown('<div class="marquee"><span>อยู่นิ่งๆ ไม่เจ็บตัว... อยู่หน้าจอรอฟังเพลง...</span></div>', unsafe_allow_html=True)
-
-# ไฟกะพริบ
-st.markdown('<div class="led-bar"><div class="led"></div><div class="led" style="background:#0000FF; animation-delay:0.2s;"></div><div class="led" style="animation-delay:0.4s;"></div></div>', unsafe_allow_html=True)
-
+    # ถ้ายังไม่มีรูปให้โชว์ข้อความ
+    st.markdown('<h2 style="color:#555;">รออัปโหลดรูปปก...</h2>', unsafe_allow_html=True)
 st.markdown('</div>', unsafe_allow_html=True)
 
-# 4. ส่วนเล่นเพลง
-if songs:
+# --- ชื่อแอปและสโลแกนวิ่ง ---
+st.title("🔴 MUSIC 6D อยู่นิ้งๆไม่เจ็บตัว")
+st.markdown('<div class="marquee-style"><marquee scrollamount="8">อยู่นิ่งๆ ไม่เจ็บตัว... เพลงเพราะถล่มโรงช่าง... จัดเต็มคุณภาพ HD...</marquee></div>', unsafe_allow_html=True)
+
+# ไฟกะพริบเท่ๆ
+st.markdown('<div class="led-container"><div class="led-bulb"></div><div class="led-bulb" style="background:#0000FF; animation-delay:0.2s;"></div><div class="led-bulb" style="animation-delay:0.4s;"></div></div>', unsafe_allow_html=True)
+
+# --- ระบบเล่นเพลง ---
+if uploaded_songs:
     st.write("---")
-    s_names = [f.name for f in songs]
-    selected = st.selectbox("💿 เลือกเพลง:", s_names)
-    curr = next(f for f in songs if f.name == selected)
+    # ทำรายการเลือกเพลง
+    song_dict = {f.name: f for f in uploaded_songs}
+    selected_song_name = st.selectbox("💿 เลือกเพลงจากคลังของคุณ:", list(song_dict.keys()))
     
-    st.write(f"🎧 **กำลังจัดให้:** {selected}")
-    st.audio(curr)
+    current_audio = song_dict[selected_song_name]
+    st.success(f"กำลังเล่น: {selected_song_name}")
+    
+    # ตัวเล่นเพลงมาตรฐาน (เสถียรที่สุด)
+    st.audio(current_audio)
+else:
+    st.info("กรุณาอัปโหลดเพลงเพื่อเริ่มความมันส์ครับลูกพี่!")
