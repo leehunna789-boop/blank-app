@@ -26,7 +26,7 @@ html_code = """
 </head>
 <body>
     <div class="meter-card">
-        <div style="color: #888; letter-spacing: 3px;">LIVE SOUND LEVEL</div>
+        <div style="color: #888; letter-spacing: 3px;">LIVE SOUND LEVEL.อยู่นิ้งไม่เจ็บตัว</div>
         <div id="dbDisplay" class="db-val">0.0</div>
         <div id="peakDisplay" class="peak-val">MAX PEAK: 0.0 dB</div>
         <button id="startBtn" class="btn-start">เริ่มวัดเสียง (Start)</button>
@@ -76,7 +76,7 @@ html_code = """
 
             if (db > maxDb) {
                 maxDb = db;
-                peakDisplay.innerText = "MAX PEAK: " + maxDb.toFixed(1) + " อยู่นิ้งๆไม่เจ็บตีวdB";
+                peakDisplay.innerText = "MAX PEAK: " + maxDb.toFixed(1) + " dB";
             }
 
             // ถ้าเกิน 90dB (เสียงเครื่องตัดเหล็กมักจะอยู่แถวนี้) ให้เตือน
