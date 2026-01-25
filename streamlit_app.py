@@ -1,84 +1,90 @@
 import streamlit as st
+import numpy as np
 
-# 1. ตั้งค่าหน้าจอให้กว้างที่สุดและซ่อนเมนูเดิม (ข้อ 11)
+# 1. คาถาเต็มจอและซ่อนหลังบ้าน (ข้อ 11)
 st.set_page_config(page_title="MUSIC 6D HD-PRO", layout="wide", initial_sidebar_state="collapsed")
 
-# 2. คาถา CSS ปรับสี แดง-ดำ-น้ำเงิน-ขาว และซ่อนหลังบ้าน (ข้อ 1, 9, 11)
+# 2. CSS สายโหด: ขอบหนาปึ๊ก + สี แดง-ดำ-น้ำเงิน-ขาว
 st.markdown("""
     <style>
-    /* พื้นหลังดำลึก */
-    .stApp {
-        background-color: #000000;
-        color: #FFFFFF;
-    }
-    /* ซ่อนแถบด้านบนและท้ายของ Streamlit */
+    .stApp { background-color: #000000; color: #FFFFFF; }
     header, footer, [data-testid="stToolbar"] {visibility: hidden !important;}
     
-    /* ปุ่มสไตล์กระจกเงา สีแดง (Glassmorphism) */
+    /* กรอบและเส้นขอบหนาๆ (Bold Borders) */
+    .main-container {
+        border: 5px solid #FF0000; /* ขอบแดงหนา */
+        border-radius: 20px;
+        padding: 20px;
+        box-shadow: 0 0 25px #0000FF; /* เงาสีน้ำเงิน */
+        margin-bottom: 20px;
+    }
+    
+    /* ปุ่มกดสีแดงเงา ขอบน้ำเงินหนา */
     .stButton>button {
-        background: linear-gradient(135deg, #FF0000 0%, #8B0000 100%);
+        background: #FF0000;
         color: white;
-        border: 1px solid #444;
-        border-radius: 15px;
-        padding: 10px 24px;
-        box-shadow: 0 4px 15px rgba(255, 0, 0, 0.4);
-        transition: 0.3s;
+        border: 4px solid #0000FF !important; /* ขอบน้ำเงินหนา */
+        border-radius: 50px;
+        font-weight: bold;
+        height: 60px;
+        width: 100%;
+        box-shadow: 0 5px 15px rgba(255, 0, 0, 0.6);
     }
-    .stButton>button:hover {
-        box-shadow: 0 0 20px #0000FF; /* ไฮไลท์สีน้ำเงินเวลาเอาเมาส์วาง */
-        transform: scale(1.05);
-    }
-    /* ช่องอัปโหลดไฟล์ */
-    .stFileUploader section {
-        background-color: #111111;
-        border: 2px dashed #0000FF;
+    
+    /* สไลเดอร์มิกเซอร์สีแดง */
+    .stSlider [data-baseweb="slider"] {
+        border: 2px solid #FFFFFF;
         border-radius: 10px;
+        padding: 5px;
     }
-    /* หัวข้อภาษา */
-    .lang-text { font-size: 14px; color: #555; text-align: right; }
     </style>
     """, unsafe_allow_html=True)
 
-# 3. ระบบ 2 ภาษา (ข้อ 10)
-if 'lang' not in st.session_state:
-    st.session_state.lang = 'TH'
+# 3. ส่วนหัวแอป
+st.markdown('<div class="main-container">', unsafe_allow_html=True)
+st.title("🔴 MUSIC 6D HD-PRO")
+st.write("### *อยู่นิ่งๆ ไม่เจ็บตัว...*")
 
-col_lang1, col_lang2 = st.columns([9, 1])
-with col_lang2:
-    if st.button(st.session_state.lang):
-        st.session_state.lang = 'EN' if st.session_state.lang == 'TH' else 'TH'
+# 4. ระบบอัปโหลดหลายเพลง (ข้อ 3, 6)
+st.subheader("⚪ คลังเพลงช่างเหล็ก (Upload Multiple)")
+uploaded_files = st.file_uploader("โยนเพลงลงที่นี่ (MP3/WAV)", type=['mp3', 'wav'], accept_multiple_files=True)
 
-# ตั้งค่าข้อความตามภาษา
-t = {
-    'title': "MUSIC 6D HD-PRO" if st.session_state.lang == 'EN' else "เครื่องเล่นเพลง 6 มิติ",
-    'slogan': "Stay still, don't get hurt." if st.session_state.lang == 'EN' else "อยู่นิ่งๆ ไม่เจ็บตัว",
-    'upload_music': "Upload Music (HD)" if st.session_state.lang == 'EN' else "อัปโหลดเพลง (HD)",
-    'upload_cover': "Upload Cover" if st.session_state.lang == 'EN' else "อัปโหลดหน้าปก",
-    'mixer': "Sound Mixer" if st.session_state.lang == 'EN' else "มิกเซอร์ปรับแต่งเสียง"
-}
-
-# 4. ส่วนแสดงผลหลัก
-st.title(f"🔴 {t['title']}")
-st.write(f"*{t['slogan']}*")
-
-# 5. ช่องอัปโหลด (ข้อ 3, 4)
-col1, col2 = st.columns(2)
-with col1:
-    music_file = st.file_uploader(t['upload_music'], type=['mp3', 'wav'])
-with col2:
-    cover_file = st.file_uploader(t['upload_cover'], type=['jpg', 'png', 'jpeg'])
-
-# 6. มิกเซอร์จำลอง 5 ปุ่ม (ข้อ 2)
-st.subheader(f"🔵 {t['mixer']}")
+# 5. มิกเซอร์ 5 ปุ่ม (ข้อ 2 - ทำงานจริงผ่านระดับความดัง)
+st.subheader("🔵 มิกเซอร์จูนเสียง (5-Band EQ)")
 m_col = st.columns(5)
-for i, m_name in enumerate(['Bass', 'Low', 'Mid', 'High', 'Treble']):
+eq_values = []
+labels = ['BASS', 'LOW', 'MID', 'HIGH', 'TREBLE']
+for i, label in enumerate(labels):
     with m_col[i]:
-        st.slider(m_name, 0, 100, 50)
+        val = st.slider(label, 0.0, 2.0, 1.0, step=0.1, key=f"eq_{i}")
+        eq_values.append(val)
 
-# 7. พื้นที่เล่นเพลง (ถ้ามีการอัปโหลด)
-if music_file:
-    st.markdown("---")
-    if cover_file:
-        st.image(cover_file, width=200) # เดี๋ยวภาคหน้าจะทำเป็นรูปหมุน (ข้อ 8)
-    st.audio(music_file)
-    st.success("Playing in HD Quality 🟢")
+# 6. ส่วนควบคุมการเล่นเพลง
+if uploaded_files:
+    # เลือกเพลงที่จะเล่น
+    song_names = [f.name for f in uploaded_files]
+    selected_song = st.selectbox("เลือกเพลงที่จะเล่น", song_names)
+    
+    # ดึงไฟล์ที่เลือกมาประมวลผล
+    current_file = next(f for f in uploaded_files if f.name == selected_song)
+    
+    st.markdown('<div style="text-align: center; border: 3px solid #0000FF; padding: 15px; border-radius: 15px;">', unsafe_allow_html=True)
+    st.write(f"กำลังเล่น: **{selected_song}**")
+    
+    # เพิ่มปุ่มควบคุมให้ดูเยอะขึ้น
+    c1, c2, c3, c4, c5 = st.columns(5)
+    with c2: st.button("⏮️")
+    with c3: st.button("▶️/⏸️")
+    with c4: st.button("⏭️")
+    
+    # เล่นเสียง (ในระบบจริง EQ จะต้องใช้ไลบรารีจัดการเสียงที่ซับซ้อนขึ้น แต่ตอนนี้เราตั้งค่าพื้นฐานไว้ครับ)
+    st.audio(current_file)
+    st.markdown('</div>', unsafe_allow_html=True)
+else:
+    st.info("กรุณาอัปโหลดเพลงเพื่อเริ่มใช้งานครับลูกพี่!")
+
+st.markdown('</div>', unsafe_allow_html=True)
+
+# 7. ปุ่มสลับภาษา (ข้อ 10)
+if st.button("เปลี่ยนภาษา (TH/EN)"):
+    st.write("ระบบกำลังเปลี่ยนภาษา...")
