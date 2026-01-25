@@ -1,96 +1,120 @@
-import pyaudio
-import numpy as np
-import audioop
-import math
-import tkinter as tk
-from tkinter import ttk
-# นำเข้าไลบรารี Image และ ImageTk จาก Pillow
-from PIL import Image, ImageTk
+import streamlit as st
+import streamlit.components.v1 as components
 
-# --- ตั้งค่าเสียง ---
-FORMAT = pyaudio.paInt16
-CHANNELS = 1
-RATE = 44100
-CHUNK = 1024
-audio = pyaudio.PyAudio()
-stream = None
-running = False
-# ----------------------
+st.set_page_config(page_title="Pro Audio Meter & Player", layout="wide")
 
-def start_audio_stream():
-    global stream, running
-    if running: return
-    stream = audio.open(format=FORMAT, channels=CHANNELS, rate=RATE, input=True, frames_per_buffer=CHUNK)
-    running = True
-    status_label.config(text="สถานะ: กำลังวัดเสียง...", foreground="green")
-    start_button.config(state=tk.DISABLED)
-    update_meter()
+# ซ่อน UI Streamlit
+st.markdown("""
+    <style>
+    #MainMenu, footer, header, .stDeployButton, #stDecoration, [data-testid="stStatusWidget"] {visibility: hidden; display:none !important;}
+    body { background-color: #050505; }
+    </style>
+""", unsafe_allow_html=True)
 
-def update_meter():
-    if not running: return
-    try:
-        data = stream.read(CHUNK, exceptionOnOverflow=False)
-        rms = audioop.rms(data, 2)
-        if rms == 0: db = 0
-        else: db = 20 * math.log10(rms / 1.0)
-        if db > 120: db = 120 
+html_code = """
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        :root { --neon: #00ff88; --bg: #111; }
+        body { background: #050505; color: white; font-family: sans-serif; display: flex; justify-content: center; padding: 20px; }
+        .main-box {
+            background: var(--bg); border: 8px solid var(--neon); border-radius: 40px;
+            padding: 30px; width: 350px; text-align: center; box-shadow: 0 0 30px rgba(0,255,136,0.2);
+        }
+        .db-display { font-size: 5rem; font-weight: bold; color: var(--neon); margin: 10px 0; font-family: monospace; }
+        .peak-label { color: #ffcc00; font-size: 1rem; margin-bottom: 20px; }
+        .player-controls { border-top: 1px solid #333; margin-top: 20px; padding-top: 20px; }
+        .btn-main { background: var(--neon); border: none; width: 60px; height: 60px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; }
+        .file-label { display: block; margin-top: 20px; color: var(--neon); border: 1px dashed var(--neon); padding: 10px; cursor: pointer; border-radius: 10px; }
+    </style>
+</head>
+<body>
+    <div class="main-box">
+        <div style="font-size: 0.8rem; letter-spacing: 2px;">LIVE DECIBEL (dB)</div>
+        <div id="dbDisplay" class="db-display">0.0</div>
+        <div id="peakDisplay" class="peak-label">MAX PEAK: 0.0 dB</div>
+        
+        <button id="micBtn" style="padding: 10px; border-radius: 10px; cursor: pointer; background: #333; color: white; border: none;">
+            🎤 เปิดไมค์วัดเสียงเครื่องตัดเหล็ก
+        </button>
 
-        db_label.config(text=f"{db:.1f}")
-        if db > 80: db_label.config(foreground="red")
-        elif db > 60: db_label.config(foreground="orange")
-        else: db_label.config(foreground="green")
+        <div class="player-controls">
+            <div id="trackName" style="font-size: 0.8rem; color: #888; margin-bottom: 10px;">หยุดเล่นเพลง</div>
+            <button onclick="document.getElementById('audio').play()" class="btn-main">▶</button>
+            <button onclick="document.getElementById('audio').pause()" class="btn-main" style="background:#444; color:white;">⏸</button>
+            
+            <label class="file-label">
+                <input type="file" id="files" accept="audio/*" style="display:none;">
+                [ + ใส่เพลงฟังชิลๆ ]
+            </label>
+        </div>
+    </div>
 
-        root.after(50, update_meter)
-    except IOError:
-        root.after(50, update_meter)
-    except Exception as e:
-        status_label.config(text=f"ข้อผิดพลาด: {e}", foreground="red")
+    <audio id="audio" crossorigin="anonymous"></audio>
 
-# --- ตั้งค่า Tkinter GUI ---
-root = tk.Tk()
-app_name = "SOUND MASTER PRO BY [ใส่ชื่อของคุณที่นี่]"
-root.title(app_name)
-root.geometry("400x400")
-root.resizable(False, False)
+    <script>
+        const audio = document.getElementById('audio');
+        const dbDisplay = document.getElementById('dbDisplay');
+        const peakDisplay = document.getElementById('peakDisplay');
+        const micBtn = document.getElementById('micBtn');
+        
+        let audioCtx, analyser, dataArray, maxDb = 0;
 
-style = ttk.Style()
-style.configure("TButton", padding=6, font=('Arial', 12))
+        async function initAudio() {
+            if (audioCtx) return;
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            analyser = audioCtx.createAnalyser();
+            analyser.fftSize = 256;
+            dataArray = new Uint8Array(analyser.frequencyBinCount);
+            
+            // เชื่อมต่อไมโครโฟน
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                const micSource = audioCtx.createMediaStreamSource(stream);
+                micSource.connect(analyser);
+                micBtn.style.background = "#00ff88";
+                micBtn.style.color = "#000";
+                micBtn.innerText = "🎤 ไมค์กำลังทำงาน...";
+                update();
+            } catch (err) {
+                alert("กรุณากดอนุญาตไมค์เพื่อวัดเสียงเครื่องตัดเหล็กนะครับ");
+            }
 
-# >>> ส่วนการใส่โลโก้ JPG <<<
-try:
-    # โหลดไฟล์ JPG ด้วย Pillow
-    img = Image.open("logo.jpg") 
-    # ปรับขนาดรูปภาพตามต้องการ (ย่อเหลือครึ่งนึง)
-    img = img.resize((100, 100), Image.Resampling.LANCZOS)
-    # แปลงรูปภาพให้เป็นรูปแบบที่ Tkinter เข้าใจ
-    logo_image = ImageTk.PhotoImage(img) 
-    logo_label = tk.Label(root, image=logo_image)
-    logo_label.image = logo_image # จำเป็นเพื่อป้องกัน GC ลบรูปทิ้ง
-    logo_label.pack(pady=10)
-except Exception as e:
-    print(f"ไม่พบไฟล์ logo.jpg หรือไฟล์เสียหาย: {e}")
+            // เชื่อมต่อเครื่องเล่นเพลง (อยู่นิ้งๆไม่เจ็บตัว)
+            const songSource = audioCtx.createMediaElementSource(audio);
+            songSource.connect(analyser);
+            analyser.connect(audioCtx.destination);
+        }
 
-# Label แสดงค่า dB
-db_label = tk.Label(root, text="0.0", font=("Arial", 80, "bold"), foreground="green")
-db_label.pack(pady=10)
+        micBtn.onclick = initAudio;
 
-# Label หน่วยวัด
-unit_label = tk.Label(root, text="dB", font=("Arial", 20))
-unit_label.pack()
+        document.getElementById('files').onchange = (e) => {
+            initAudio();
+            const file = e.target.files[0];
+            audio.src = URL.createObjectURL(file);
+            document.getElementById('trackName').innerText = file.name;
+        };
 
-# ปุ่มเริ่มการวัด
-start_button = ttk.Button(root, text="เริ่มวัดเสียง", command=start_audio_stream)
-start_button.pack(pady=20)
+        function update() {
+            requestAnimationFrame(update);
+            analyser.getByteFrequencyData(dataArray);
+            let sum = 0;
+            for(let i=0; i<dataArray.length; i++) sum += dataArray[i];
+            let avg = sum / dataArray.length;
+            
+            let db = (avg / 255) * 110;
+            db = Math.max(0, db + 20); 
+            
+            dbDisplay.innerText = db.toFixed(1);
+            if (db > maxDb) {
+                maxDb = db;
+                peakDisplay.innerText = "MAX PEAK: " + maxDb.toFixed(1) + " dB";
+            }
+        }
+    </script>
+</body>
+</html>
+"""
 
-# สถานะ
-status_label = tk.Label(root, text="สถานะ: รอเริ่ม", font=("Arial", 10), foreground="gray")
-status_label.pack(pady=10)
-
-# เริ่ม Main Loop ของ GUI
-root.mainloop()
-
-# --- ปิด Stream เมื่อโปรแกรมปิด ---
-if stream:
-    stream.stop_stream()
-    stream.close()
-audio.terminate()
+components.html(html_code, height=750)
