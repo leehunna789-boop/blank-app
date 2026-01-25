@@ -34,7 +34,7 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 st.markdown('<div class="main-frame">', unsafe_allow_html=True)
-st.title("🔴 MUSIC 6D - STANDARD HD")
+st.title("🔴 MUSIC 6D.อยู่นิ้งๆไม่เจ็บตัว.HD")
 st.write("### *อยู่นิ่งๆ ไม่เจ็บตัว...*")
 
 # 3. ส่วนอัปโหลด
