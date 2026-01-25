@@ -1,90 +1,87 @@
 import streamlit as st
-import numpy as np
+import base64
+import time
 
-# 1. คาถาเต็มจอและซ่อนหลังบ้าน (ข้อ 11)
+# 1. ตั้งค่าหน้าจอและ CSS (ขอบหนาปึ๊กเหมือนเดิม)
 st.set_page_config(page_title="MUSIC 6D HD-PRO", layout="wide", initial_sidebar_state="collapsed")
 
-# 2. CSS สายโหด: ขอบหนาปึ๊ก + สี แดง-ดำ-น้ำเงิน-ขาว
 st.markdown("""
     <style>
     .stApp { background-color: #000000; color: #FFFFFF; }
     header, footer, [data-testid="stToolbar"] {visibility: hidden !important;}
-    
-    /* กรอบและเส้นขอบหนาๆ (Bold Borders) */
-    .main-container {
-        border: 5px solid #FF0000; /* ขอบแดงหนา */
-        border-radius: 20px;
-        padding: 20px;
-        box-shadow: 0 0 25px #0000FF; /* เงาสีน้ำเงิน */
-        margin-bottom: 20px;
-    }
-    
-    /* ปุ่มกดสีแดงเงา ขอบน้ำเงินหนา */
-    .stButton>button {
-        background: #FF0000;
-        color: white;
-        border: 4px solid #0000FF !important; /* ขอบน้ำเงินหนา */
-        border-radius: 50px;
-        font-weight: bold;
-        height: 60px;
-        width: 100%;
-        box-shadow: 0 5px 15px rgba(255, 0, 0, 0.6);
-    }
-    
-    /* สไลเดอร์มิกเซอร์สีแดง */
-    .stSlider [data-baseweb="slider"] {
-        border: 2px solid #FFFFFF;
-        border-radius: 10px;
-        padding: 5px;
-    }
+    .main-box { border: 10px solid #FF0000; border-radius: 30px; padding: 25px; box-shadow: 0 0 35px #0000FF; }
+    .stButton>button { background: #FF0000; color: white; border: 5px solid #0000FF !important; border-radius: 50px; font-weight: bold; }
     </style>
     """, unsafe_allow_html=True)
 
-# 3. ส่วนหัวแอป
-st.markdown('<div class="main-container">', unsafe_allow_html=True)
-st.title("🔴 MUSIC 6D HD-PRO")
-st.write("### *อยู่นิ่งๆ ไม่เจ็บตัว...*")
+# 2. ฟังก์ชันลับสำหรับการทำ Fade In/Out (Crossfade 10s)
+def audio_player_with_fade(file):
+    audio_bytes = file.read()
+    b64 = base64.b64encode(audio_bytes).decode()
+    # ใช้ JavaScript เล็กน้อยเพื่อควบคุม Volume ในเบราว์เซอร์
+    fade_script = f"""
+    <audio id="audio-player" controls autoplay style="width: 100%; border: 3px solid #FF0000;">
+        <source src="data:audio/mp3;base64,{b64}" type="audio/mp3">
+    </audio>
+    <script>
+        var audio = document.getElementById('audio-player');
+        // ระบบค่อยๆ ดังขึ้น (Fade In 10s)
+        audio.volume = 0;
+        var fadeIn = setInterval(function() {{
+            if (audio.volume < 1) {{
+                audio.volume = Math.min(1, audio.volume + 0.1);
+            }} else {{
+                clearInterval(fadeIn);
+            }}
+        }}, 1000);
 
-# 4. ระบบอัปโหลดหลายเพลง (ข้อ 3, 6)
-st.subheader("⚪ คลังเพลงช่างเหล็ก (Upload Multiple)")
-uploaded_files = st.file_uploader("โยนเพลงลงที่นี่ (MP3/WAV)", type=['mp3', 'wav'], accept_multiple_files=True)
+        // ระบบตรวจจับ 10 วินาทีสุดท้ายเพื่อค่อยๆ เบาลง (Fade Out)
+        audio.ontimeupdate = function() {{
+            if (audio.duration - audio.currentTime <= 10) {{
+                if (audio.volume > 0) {{
+                    audio.volume = Math.max(0, audio.volume - 0.01);
+                }}
+            }}
+        }};
+    </script>
+    """
+    return fade_script
 
-# 5. มิกเซอร์ 5 ปุ่ม (ข้อ 2 - ทำงานจริงผ่านระดับความดัง)
-st.subheader("🔵 มิกเซอร์จูนเสียง (5-Band EQ)")
-m_col = st.columns(5)
-eq_values = []
-labels = ['BASS', 'LOW', 'MID', 'HIGH', 'TREBLE']
-for i, label in enumerate(labels):
-    with m_col[i]:
-        val = st.slider(label, 0.0, 2.0, 1.0, step=0.1, key=f"eq_{i}")
-        eq_values.append(val)
+# --- เริ่มการแสดงผล ---
+st.markdown('<div class="main-box">', unsafe_allow_html=True)
+st.title("🔴 MUSIC 6D HD-PRO (DJ MODE)")
 
-# 6. ส่วนควบคุมการเล่นเพลง
-if uploaded_files:
-    # เลือกเพลงที่จะเล่น
-    song_names = [f.name for f in uploaded_files]
-    selected_song = st.selectbox("เลือกเพลงที่จะเล่น", song_names)
+# อัปโหลดเพลงและปก
+col_u1, col_u2 = st.columns(2)
+with col_u1:
+    songs = st.file_uploader("➕ อัปโหลดเพลง", type=['mp3', 'wav'], accept_multiple_files=True)
+with col_u2:
+    cover = st.file_uploader("🖼️ อัปโหลดปก", type=['jpg', 'png', 'jpeg'])
+
+# มิกเซอร์ 5 ปุ่ม (ปรับปรุงให้ดูหนาขึ้น)
+st.subheader("🔵 6D MIXER CONTROL")
+m_cols = st.columns(5)
+for i, label in enumerate(['BASS', 'LOW', 'MID', 'HIGH', 'TREBLE']):
+    with m_cols[i]:
+        st.slider(label, 0.0, 2.0, 1.0, key=f"mixer_{label}")
+
+# ระบบคลังเพลงและการเล่น
+if songs:
+    if 'idx' not in st.session_state: st.session_state.idx = 0
     
-    # ดึงไฟล์ที่เลือกมาประมวลผล
-    current_file = next(f for f in uploaded_files if f.name == selected_song)
+    col_p1, col_p2 = st.columns([1, 2])
+    with col_p1:
+        if cover: st.image(cover, use_container_width=True)
+        else: st.markdown('<div style="height:200px; border:5px solid #0000FF; border-radius:20px; text-align:center; padding-top:80px;">NO COVER</div>', unsafe_allow_html=True)
     
-    st.markdown('<div style="text-align: center; border: 3px solid #0000FF; padding: 15px; border-radius: 15px;">', unsafe_allow_html=True)
-    st.write(f"กำลังเล่น: **{selected_song}**")
-    
-    # เพิ่มปุ่มควบคุมให้ดูเยอะขึ้น
-    c1, c2, c3, c4, c5 = st.columns(5)
-    with c2: st.button("⏮️")
-    with c3: st.button("▶️/⏸️")
-    with c4: st.button("⏭️")
-    
-    # เล่นเสียง (ในระบบจริง EQ จะต้องใช้ไลบรารีจัดการเสียงที่ซับซ้อนขึ้น แต่ตอนนี้เราตั้งค่าพื้นฐานไว้ครับ)
-    st.audio(current_file)
-    st.markdown('</div>', unsafe_allow_html=True)
-else:
-    st.info("กรุณาอัปโหลดเพลงเพื่อเริ่มใช้งานครับลูกพี่!")
+    with col_p2:
+        curr_song = songs[st.session_state.idx]
+        st.write(f"🎧 **ตอนนี้กำลังจัดให้:** {curr_song.name}")
+        st.markdown(audio_player_with_fade(curr_song), unsafe_allow_html=True)
+        
+        # ปุ่มถัดไป
+        if st.button("⏭️ ข้ามไปเพลงถัดไป"):
+            st.session_state.idx = (st.session_state.idx + 1) % len(songs)
+            st.rerun()
 
 st.markdown('</div>', unsafe_allow_html=True)
-
-# 7. ปุ่มสลับภาษา (ข้อ 10)
-if st.button("เปลี่ยนภาษา (TH/EN)"):
-    st.write("ระบบกำลังเปลี่ยนภาษา...")
