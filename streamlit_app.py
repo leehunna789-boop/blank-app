@@ -2,94 +2,114 @@ import streamlit as st
 import os
 import base64
 
-# 1. ตั้งค่าหน้าจอ (ปิดขอบขาว ซ่อนเมนู)
-st.set_page_config(page_title="MUSIC 6D PRO", layout="wide", initial_sidebar_state="collapsed")
+# 1. ตั้งค่าหน้าจอแบบ Full Dark Mode
+st.set_page_config(page_title="MUSIC 6D - NEW UI", layout="wide", initial_sidebar_state="collapsed")
 
-# 2. CSS สายโหด: ล็อกรูปเข้ากรอบ + ปรับแต่ง Font
+# 2. CSS ขั้นเทพ: เน้นความหรูหรา แดง-น้ำเงิน-ทอง
 st.markdown("""
     <style>
-    .stApp { background-color: #000; color: #fff; }
+    .stApp { background: linear-gradient(180deg, #000 0%, #111 100%); color: #fff; }
     header, footer, [data-testid="stToolbar"] {visibility:hidden !important;}
     
-    /* กรอบสี่เหลี่ยมทีวีหลัก */
-    .tv-display {
-        border: 15px solid #FF0000;
-        border-right: 15px solid #0000FF;
-        border-bottom: 15px solid #0000FF;
-        border-radius: 40px;
+    /* กรอบลูกโลกแบบใหม่: ทรงกลมในกรอบสี่เหลี่ยม */
+    .main-monitor {
+        border: 8px double #FF0000;
+        border-right-color: #0000FF;
+        border-bottom-color: #0000FF;
+        border-radius: 50px;
         width: 100%;
-        height: 380px;
-        background: #000;
+        height: 420px;
+        background: radial-gradient(circle, #222 0%, #000 100%);
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
-        overflow: hidden;
-        box-shadow: 0 0 35px #FF0000;
-        margin-bottom: 15px;
+        box-shadow: 0 0 50px rgba(255, 0, 0, 0.3);
+        margin-bottom: 30px;
+        position: relative;
     }
 
-    /* บังคับลูกโลกให้เต็มกรอบ */
-    .tv-display img {
+    /* ตกแต่งรูปลูกโลกให้หมุนนิ่มๆ */
+    .globe-style {
+        width: 280px;
+        height: 280px;
+        border-radius: 50%;
+        border: 5px solid #fff;
+        box-shadow: 0 0 25px #0000FF;
+        animation: rotateGlobe 15s linear infinite;
+        object-fit: cover;
+    }
+    @keyframes rotateGlobe { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+    /* ป้ายไฟสโลแกนแบบวิ่งเนียนๆ */
+    .led-marquee {
         width: 100%;
-        height: 100%;
-        object-fit: cover; /* ให้รูปเต็มกรอบพอดี */
-    }
-
-    /* ตัวหนังสือวิ่ง */
-    .marquee-style {
-        background: #111;
-        border: 2px solid #0000FF;
-        border-radius: 12px;
-        padding: 12px;
-        color: #FF0000;
-        font-size: 26px;
+        background: #FF0000;
+        color: #fff;
+        padding: 8px 0;
+        font-size: 22px;
         font-weight: bold;
-        margin-bottom: 20px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        box-shadow: 0 5px 15px rgba(255,0,0,0.5);
     }
 
-    /* ตกแต่งช่องเลือกเพลง */
-    .stSelectbox div[data-baseweb="select"] {
-        background-color: #111 !important;
-        border: 2px solid #0000FF !important;
+    /* กล่องควบคุมเพลง */
+    .control-panel {
+        background: #1a1a1a;
+        border: 2px solid #333;
+        border-radius: 20px;
+        padding: 20px;
+        margin-top: 20px;
     }
     </style>
     """, unsafe_allow_html=True)
 
-# --- 3. จอ TV หลัก (ดึงลูกโลกขึ้นมาโชว์) ---
-st.markdown('<div class="tv-display">', unsafe_allow_html=True)
+# --- 3. ส่วนแสดงผลหลัก (Monitor) ---
+st.markdown('<div class="main-monitor">', unsafe_allow_html=True)
 
-# ใช้เทคนิค Base64 เพื่อบังคับให้รูปแสดงในตำแหน่งที่ต้องการ
+# ดึงรูป globe.jpg มาใส่ในจอหลัก
 if os.path.exists("globe.jpg"):
     with open("globe.jpg", "rb") as f:
-        data = base64.b64encode(f.read()).decode()
-    st.markdown(f'<img src="data:image/jpeg;base64,{data}">', unsafe_allow_html=True)
+        img_data = base64.b64encode(f.read()).decode()
+    st.markdown(f'<img src="data:image/jpeg;base64,{img_data}" class="globe-style">', unsafe_allow_html=True)
 else:
-    st.markdown('<h1 style="color:#555;">รอไฟล์ globe.jpg...</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 style="color:#FF0000;">🌍 NO GLOBE FOUND</h1>', unsafe_allow_html=True)
+
+st.markdown('<div style="margin-top:15px; font-size:20px; color:#0000FF; font-weight:bold;">SYSTEM ONLINE</div>', unsafe_allow_html=True)
+st.markdown('</div>', unsafe_allow_html=True)
+
+# --- 4. แถวสโลแกน (วิ่งพาดกลางจอ) ---
+st.markdown('<div class="led-marquee"><marquee scrollamount="12">★ อยู่นิ่งๆ ไม่เจ็บตัว ★ MUSIC 6D PRODUCTION ★ สถานีความบันเทิง 24 ชั่วโมง ★</marquee></div>', unsafe_allow_html=True)
+
+# --- 5. แผงควบคุมดีเจ ---
+st.markdown('<div class="control-panel">', unsafe_allow_html=True)
+col1, col2 = st.columns([1, 1])
+
+with col1:
+    st.write("### 💿 คลังเพลงของลูกพี่")
+    music_files = [f for f in os.listdir('.') if f.endswith('.mp3')]
+    if music_files:
+        selected_song = st.selectbox("เลือกเพลงเพื่อเริ่มบรรเลง:", music_files)
+        st.write(f"🎧 **Now Playing:** {selected_song}")
+        st.audio(selected_song)
+    else:
+        st.error("⚠️ ยังไม่มีเพลงในคลัง (อัปไฟล์ .mp3 ลงหน้าหลัก GitHub)")
+
+with col2:
+    st.write("### 📸 มุมโชว์รูปจากเพื่อน")
+    friend_pics = st.file_uploader("ส่งรูปมาโชว์บนบอร์ดได้เลยจ้า", type=['jpg','png','jpeg'], accept_multiple_files=True)
 
 st.markdown('</div>', unsafe_allow_html=True)
 
-# --- 4. ตัวหนังสือวิ่งสไตล์ลูกพี่ ---
-st.markdown('<div class="marquee-style"><marquee scrollamount="12">อยู่นิ่งๆ ไม่เจ็บตัว... คลังเพลง HD ของลูกพี่... ยินดีต้อนรับเพื่อนๆ ทุกคน!</marquee></div>', unsafe_allow_html=True)
-
-# --- 5. เครื่องเล่นเพลง (ดึงจาก GitHub 5 เพลงที่ลูกพี่ลงไว้) ---
-music_files = [f for f in os.listdir('.') if f.endswith('.mp3')]
-
-if music_files:
-    st.markdown(f"### 💿 มีเพลงทั้งหมด {len(music_files)} เพลง")
-    selected_song = st.selectbox("เลือกเพลงที่ต้องการฟัง:", music_files)
-    
-    st.markdown(f"#### 🎧 กำลังบรรเลง: <span style='color:#0000FF;'>{selected_song}</span>", unsafe_allow_html=True)
-    st.audio(selected_song)
-else:
-    st.warning("⚠️ ไม่พบไฟล์เพลงใน GitHub ครับลูกพี่")
-
-# --- 6. มุมเพื่อนโชว์รูป (ไว้ข้างล่างสุด) ---
-st.write("---")
-st.subheader("📸 มุมเพื่อนโชว์รูป (รูปจะอยู่ด้านล่างตรงนี้จ้า)")
-friend_pics = st.file_uploader("ลงรูปโชว์กันตรงนี้จ้า", type=['jpg','png','jpeg'], accept_multiple_files=True)
-
+# --- 6. แสดงรูปจากเพื่อน (Gallery) ---
 if friend_pics:
-    for pic in friend_pics:
-        st.image(pic, use_container_width=True)
+    st.write("---")
+    st.write("### 🔥 เพื่อนๆ กำลังแชร์รูป:")
+    cols = st.columns(4)
+    for idx, pic in enumerate(friend_pics):
+        with cols[idx % 4]:
+            st.image(pic, use_container_width=True)
 
-st.write("#### *สโลแกน: อยู่นิ่งๆ ไม่เจ็บตัว*")
+st.write("---")
+st.markdown("<center>MUSIC 6D - อยู่นิ่งๆ ไม่เจ็บตัว</center>", unsafe_allow_html=True)
