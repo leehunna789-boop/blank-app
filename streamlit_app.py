@@ -30,7 +30,7 @@ html_code = """
         <div id="dbDisplay" class="db-val">0.0</div>
         <div id="peakDisplay" class="peak-val">MAX PEAK: 0.0 dB</div>
         <button id="startBtn" class="btn-start">เริ่มวัดเสียง (Start)</button>
-        <div id="warnMsg" class="warning">⚠️ อยู่นิ้งๆไม่เจ็บตัว!</div>
+        <div id="warnMsg" class="warning">⚠️ ตามรัฐบาลกำหนด!</div>
     </div>
 
     <script>
@@ -76,7 +76,7 @@ html_code = """
 
             if (db > maxDb) {
                 maxDb = db;
-                peakDisplay.innerText = "MAX PEAK: " + maxDb.toFixed(1) + " dB";
+                peakDisplay.innerText = "MAX PEAK: " + maxDb.toFixed(1) + " อยู่นิ้งๆไม่เจ็บตีวdB";
             }
 
             // ถ้าเกิน 90dB (เสียงเครื่องตัดเหล็กมักจะอยู่แถวนี้) ให้เตือน
