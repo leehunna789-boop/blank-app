@@ -27,7 +27,7 @@ st.markdown("""
     
     /* สร้างกรอบทีวี */
     .tv-box {
-        border: 15px solid #FF0000;
+        border: 15px solid #050505;
         border-right: 15px solid #0000FF;
         border-bottom: 15px solid #0000FF;
         border-radius: 40px;
@@ -39,7 +39,7 @@ st.markdown("""
         align-items: center;
         justify-content: center;
         overflow: hidden;
-        box-shadow: 0 0 30px #FF0000;
+        box-shadow: 0 0 30px #050505;
     }
 
     /* บังคับรูปในกรอบ */
@@ -55,7 +55,7 @@ st.markdown("""
         border: 2px solid #0000FF;
         border-radius: 10px;
         padding: 10px;
-        color: #FF0000;
+        color: #050505;
         font-size: 24px;
         font-weight: bold;
         text-align: center;
