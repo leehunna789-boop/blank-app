@@ -1,83 +1,91 @@
 import streamlit as st
 import os
+import base64
 
-# 1. ตั้งค่าหน้าจอ (เน้นความกว้างและซ่อนเมนู)
-st.set_page_config(page_title="MUSIC 6D - DJ LOOK-PHEE", layout="wide", initial_sidebar_state="collapsed")
+# 1. ตั้งค่าหน้าจอ
+st.set_page_config(page_title="MUSIC 6D PRO", layout="wide", initial_sidebar_state="collapsed")
 
-# 2. CSS สายโหด: เน้นกรอบรูปของเพื่อนให้เด่นที่สุด
+# 2. CSS คาถาล็อกรูปเข้ากรอบ
 st.markdown("""
     <style>
     .stApp { background-color: #000; color: #fff; }
-    header, footer, [data-testid="stToolbar"] {visibility:hidden !important;}
+    header, footer, [data-testid="stToolbar"] {display:none !important;}
     
-    /* กรอบสี่เหลี่ยมด้านบนสำหรับโชว์รูปเพื่อน */
-    .top-frame {
+    /* กรอบสี่เหลี่ยมหลัก (ที่ลูกพี่อยากให้รูปไปอยู่) */
+    .display-screen {
         border: 15px solid #FF0000;
-        border-right: 15px solid #0000FF;
-        border-bottom: 15px solid #0000FF;
-        border-radius: 40px;
-        padding: 5px;
-        text-align: center;
+        border-right-color: #0000FF;
+        border-bottom-color: #0000FF;
+        border-radius: 45px;
+        width: 100%;
+        height: 400px;
         background: #111;
-        box-shadow: 0 0 40px #FF0000;
-        margin-bottom: 20px;
-        min-height: 350px;
         display: flex;
-        justify-content: center;
         align-items: center;
+        justify-content: center;
         overflow: hidden;
-    }
-
-    /* ตัวหนังสือวิ่ง */
-    .marquee-style {
-        background: #000;
-        border: 3px solid #0000FF;
-        border-radius: 12px;
-        padding: 10px;
-        color: #FF0000;
-        font-size: 24px;
-        font-weight: bold;
+        position: relative;
+        box-shadow: 0 0 30px #FF0000;
         margin-bottom: 20px;
     }
 
-    /* ปุ่มอัปโหลดรูปของเพื่อน (ปรับให้ดูเท่) */
-    .stFileUploader section {
-        background-color: #111 !important;
-        border: 2px dashed #FF0000 !important;
-        color: #fff !important;
+    /* บังคับรูปให้เต็มกรอบ */
+    .display-screen img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* ให้รูปเต็มกรอบพอดี ไม่เบี้ยว */
     }
+
+    /* ตัวหนังสือวิ่งในจอ */
+    .screen-text {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        background: rgba(0,0,0,0.7);
+        color: #FF0000;
+        font-weight: bold;
+        padding: 10px;
+        font-size: 20px;
+    }
+
+    /* ปรับปุ่มอัปโหลดให้ดูเล็กลง ไม่เกะกะ */
+    .stFileUploader { padding-top: 0px; }
     </style>
     """, unsafe_allow_html=True)
 
-# --- 3. ส่วนกรอบบน: โชว์รูปที่เพื่อนอัปโหลด ---
-# เราจะสร้างพื้นที่โชว์รูปไว้ก่อน
-st.markdown('<div class="top-frame">', unsafe_allow_html=True)
+# --- 3. ส่วนควบคุม (เบื้องหลัง) ---
+# ลูกพี่ลงเพลงใน GitHub ไว้เลยครับ
+music_files = [f for f in os.listdir('.') if f.endswith('.mp3')]
 
-# รับรูปจากเพื่อน (เพื่อนเลือกรูปจากมือถือได้เลย)
-friend_pic = st.file_uploader("📸 เพื่อนๆ ลงรูปที่อยากให้ขึ้นจอตรงนี้จ้า", type=['jpg','png','jpeg'])
+# --- 4. ส่วนให้เพื่อนลงรูป ---
+st.write("### 📸 เพื่อนลงรูปตรงนี้...")
+friend_file = st.file_uploader("", type=['jpg','png','jpeg'], label_visibility="collapsed")
 
-if friend_pic:
-    st.image(friend_pic, use_container_width=True)
+# --- 5. จอแสดงผล (กรอบสี่เหลี่ยมที่ลูกพี่ต้องการ) ---
+st.markdown('<div class="display-screen">', unsafe_allow_html=True)
+
+if friend_file:
+    # แปลงรูปที่เพื่อนอัปโหลดเป็น Base64 เพื่อยัดเข้าในกรอบ HTML
+    img_data = base64.b64encode(friend_file.read()).decode()
+    st.markdown(f'<img src="data:image/png;base64,{img_data}">', unsafe_allow_html=True)
 else:
-    st.markdown('<h2 style="color:#444;">ส่งรูปมาโชว์บนจอสิเพื่อน!<br>เพลงเด็ดรออยู่แล้ว</h2>', unsafe_allow_html=True)
+    # ถ้ายังไม่มีรูป ให้โชว์ข้อความกะพริบในกรอบ
+    st.markdown('<h2 style="color:#555; animation: blinker 1s infinite alternate;">รอรูปจากเพื่อน...</h2><style>@keyframes blinker { from {opacity: 1;} to {opacity: 0.3;} }</style>', unsafe_allow_html=True)
+
+# ใส่ชื่อเพลงวิ่งในกรอบเลย (ถ้ามีเพลง)
+if music_files:
+    st.markdown('<div class="screen-text"><marquee scrollamount="8">🎶 อยู่นิ่งๆ ไม่เจ็บตัว... กำลังเตรียมเพลงให้เพื่อนฟัง... 🎧</marquee></div>', unsafe_allow_html=True)
+
 st.markdown('</div>', unsafe_allow_html=True)
 
-# --- 4. ชื่อแอปและสโลแกนวิ่ง ---
-st.title("🔴 MUSIC 6D - LOOK-PHEE STATION")
-st.markdown('<div class="marquee-style"><marquee scrollamount="12">อยู่นิ่งๆ ไม่เจ็บตัว... เพลงคัดโดยลูกพี่... รูปโชว์โดยเพื่อนๆ... ฟังเพลง HD กันยาวๆ!</marquee></div>', unsafe_allow_html=True)
+# --- 6. ส่วนเล่นเพลงของลูกพี่ ---
+st.title("🔴 MUSIC 6D - LOOK-PHEE")
 
-# --- 5. ระบบคลังเพลงของลูกพี่ (ดึงจาก GitHub) ---
-# ลูกพี่เอาไฟล์ .mp3 ไปวางคู่กับโค้ดนี้ใน GitHub ได้เลยครับ
-music_list = [f for f in os.listdir('.') if f.endswith('.mp3')]
-
-if music_list:
-    st.write("### 💿 เลือกเพลงจากคลังของลูกพี่")
-    song_choice = st.selectbox("", music_list)
-    
-    st.markdown(f"#### 🎧 กำลังบรรเลง: <span style='color:#0000FF;'>{song_choice}</span>", unsafe_allow_html=True)
-    st.audio(song_choice)
+if music_files:
+    selected_song = st.selectbox("💿 เพื่อนๆ เลือกฟังเพลงที่นี่นะ:", music_files)
+    st.audio(selected_song)
 else:
-    st.info("⚠️ ลูกพี่ครับ ลงเพลงใน GitHub หน่อย เพื่อนๆ รอฟังอยู่!")
+    st.warning("⚠️ ลูกพี่ลืมลงเพลงใน GitHub หรือเปล่าครับ?")
 
-st.write("---")
-st.caption("แอปนี้สร้างมาเพื่อเพื่อน: อยู่นิ่งๆ ไม่เจ็บตัว")
+st.markdown('---')
+st.write("*สโลแกน: อยู่นิ่งๆ ไม่เจ็บตัว*")
