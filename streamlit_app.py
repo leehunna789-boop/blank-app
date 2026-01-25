@@ -4,7 +4,21 @@ import base64
 
 # 1. ตั้งค่าหน้าจอ
 st.set_page_config(page_title="MUSIC 6D PRO", layout="wide", initial_sidebar_state="collapsed")
+# --- 2. แต่งหน้าตาให้เท่ (UI) ---
+st.set_page_config(page_title="SYNAPSE 6D Pro", layout="centered")
 
+st.markdown("""
+    <style>
+    .stApp { background-color: #050505; color: white; }
+    .stButton>button { 
+        background-color: #FF0000; color: white; border-radius: 10px; 
+        height: 60px; font-weight: bold; border: 2px solid #FFD700;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+st.title("S.S.S Music 6D")
+st.write('สโลแกน: "อยู่นิ่งๆ ไม่เจ็บตัว"')
 # 2. คาถา CSS ล็อกพิกัด (บังคับรูปอยู่ข้างในเท่านั้น)
 st.markdown("""
     <style>
