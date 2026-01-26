@@ -19,11 +19,11 @@ st.title("🎵 เครื่องเล่นเพลง R&B บำบัด
 st.write("สร้างสรรค์โดย: ช่างใหญ่ (12x12 System)")
 
 # --- จัดการไฟล์ ---
-MUSIC_DIR = "my_music" # โฟลเดอร์เพลงของช่างใหญ่
+music_files = [f for f in os.listdir('.') if f.endswith('.mp3')]
 if not os.path.exists(MUSIC_DIR):
     os.makedirs(MUSIC_DIR)
 
-songs = [f for f in os.listdir(MUSIC_DIR) if f.endswith('.mp3')]
+music_files = [f for f in os.listdir(MUSIC_DIR) if f.endswith('.mp3')]
 st.markdown(f"""
     <div style="background: #1A0000; padding: 20px; border-radius: 15px; border: 1px solid #FF0000;">
         <p style="color: #FFD700; font-size: 14px; margin-bottom: 10px; text-align: center;">
