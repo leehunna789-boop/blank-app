@@ -34,7 +34,7 @@ st.markdown(f"""
     """, unsafe_allow_html=True)
 
 # --- 2. ส่วนหัวและโลโก้ Globe ---
-col1, col2, col3 = st.columns([1,1,1])
+col1, col2, col3 = st.columns([111])
 with col2:
     try:
         st.image("globe.jpg", width=180) # โลโก้ globe.jpg
@@ -45,7 +45,7 @@ st.markdown("<h2 style='text-align:center;'>สถานีบำบัดใจ
 
 # --- 3. ระบบจัดการเพลงจาก GitHub ---
 # ช่างใหญ่: ใส่ชื่อเพลงและลิงก์ Raw GitHub ตรงนี้ครับ
-SONG_LIST = {
+SONG_LIST = {https://github.com/leehunna789-boop/blank-app/commit/9ec096604522ac0148466ba0f63ee5561f196c9b
     "บทเพลงสร้างความสงบ 01": "https://raw.githubusercontent.com/USER/REPO/main/song1.mp3",
     "บทเพลงฮีลใจ 02": "https://raw.githubusercontent.com/USER/REPO/main/song2.mp3"
 }
