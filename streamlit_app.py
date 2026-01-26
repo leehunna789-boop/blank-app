@@ -48,7 +48,7 @@ st.markdown("""
     .stApp { background-color: #050505; color: white; }
     .stButton>button { 
      stAppbackground-color: #FF0000; color: white; border-radius: 10px; 
-    height: 60px; font-weight: bold; border: 2px solid #FFD700; }
+     height: 60px; font-weight: bold; border: 2px solid #FFD700; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -58,7 +58,7 @@ st.write('สโลแกน: "อยู่นิ่งๆ ไม่เจ็บ
 st.markdown("""
     <style>
     .stApp { background-color: #000; color: #fff; }
-    header, footer, [data-testid="stToolbar"] {visibility:hidden !important;}
+     header, footer, [data-testid="stToolbar"] {visibility:hidden !important;}
     
     /* สร้างกรอบทีวี */
     .tv-box {
