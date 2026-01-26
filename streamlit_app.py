@@ -2,8 +2,6 @@ import streamlit as st
 import os
 import base64
 
-# 1. ตั้งค่าหน้าจอ
-st.set_page_config(page_title="MUSIC 6D PRO", layout="wide", initial_sidebar_state="collapsed")
 # --- 2. แต่งหน้าตาให้เท่ (UI) ---
 st.set_page_config(page_title="SYNAPSE 6D Pro", layout="centered")
 
