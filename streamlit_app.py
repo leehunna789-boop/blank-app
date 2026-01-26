@@ -49,6 +49,7 @@ st.markdown("""
     .stButton>button { 
      stAppbackground-color: #FF0000; color: white; border-radius: 10px; 
      height: 60px; font-weight: bold; border: 2px solid #FFD700; }
+    
     </style>
     """, unsafe_allow_html=True)
 
