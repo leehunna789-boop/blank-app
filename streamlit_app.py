@@ -1,43 +1,7 @@
 import streamlit as st
 import os
 import base64
-import streamlit as st
 
-
-# --- 6. คลังเพลง (ดึงจาก GitHub) ---
-st.write("### 💿 รายการเพลงของ อยู่นิ้งๆไม่เจ็บตัว")
-music_files = [f for f in os.listdir('.') if f.endswith('.mp3')]
-
-if music_files:
-    song = st.selectbox("เลือกเพลง:", music_files)
-    st.audio(song)
-    <style>
-    .main { background-color: #0e1117; color: #ffffff; }
-
-    </style>
-    """, unsafe_allow_html=True)
-
-st.title("🎵 เครื่องเล่นเพลง R&B บำบัด (สูตร 10 วินาที)")
-st.write("สร้างสรรค์โดย: ช่างใหญ่ (12x12 System)")
-
-# --- จัดการไฟล์ ---
-music_files = [f for f in os.listdir('.') if f.endswith('.mp3')]
-if not os.path.exists(MUSIC_DIR):
-    os.makedirs(MUSIC_DIR)
-        </p>
-        <audio controls autoplay loop style="width: 100%; filter: invert(1); opacity: 0.8;">
-            <source src="{audio_url}" type="audio/mp3">
-            Your browser does not support the audio element.
-        </audio>
-    </div>
-    
-    <script>
-        // โค้ดพยายามสั่งให้เพลงเล่นอัตโนมัติ (ขึ้นอยู่กับนโยบายของบราวเซอร์ลูกพี่ด้วย)
-        var audio = document.querySelector('audio');
-        audio.play();
-    </script>
-
-st.info("💡 หมายเหตุ: บางบราวเซอร์ (เช่น Chrome) อาจจะบล็อก Autoplay ถ้าลูกพี่ยังไม่ได้คลิกอะไรบนหน้าจอเลย ดังนั้นพอกดเข้าเว็บมาแล้ว คลิกตรงไหนก็ได้ทีนึง เพลงจะบรรเลงยาวๆ เลยครับ!")
 # 1. ตั้งค่าหน้าจอ
 st.set_page_config(page_title="MUSIC 6D PRO", layout="wide", initial_sidebar_state="collapsed")
 # --- 2. แต่งหน้าตาให้เท่ (UI) ---
@@ -47,9 +11,9 @@ st.markdown("""
     <style>
     .stApp { background-color: #050505; color: white; }
     .stButton>button { 
-     stAppbackground-color: #FF0000; color: white; border-radius: 10px; 
-     height: 60px; font-weight: bold; border: 2px solid #FFD700; }
-    
+        background-color: #FF0000; color: white; border-radius: 10px; 
+        height: 60px; font-weight: bold; border: 2px solid #FFD700;
+    }
     </style>
     """, unsafe_allow_html=True)
 
@@ -59,7 +23,7 @@ st.write('สโลแกน: "อยู่นิ่งๆ ไม่เจ็บ
 st.markdown("""
     <style>
     .stApp { background-color: #000; color: #fff; }
-     header, footer, [data-testid="stToolbar"] {visibility:hidden !important;}
+    header, footer, [data-testid="stToolbar"] {visibility:hidden !important;}
     
     /* สร้างกรอบทีวี */
     .tv-box {
@@ -69,7 +33,7 @@ st.markdown("""
         border-radius: 40px;
         width: 100%;
         height: 350px;
-        background-color: #111;
+        background-color: #000;
         margin-bottom: 20px;
         display: flex;
         align-items: center;
@@ -113,18 +77,9 @@ def display_globe():
 # --- 4. แสดงผลหน้าจอหลัก ---
 display_globe()
 
-st.markdown('<div class="run-text"><marquee scrollamount="10">อยู่นิ่งๆ ไม่เจ็บตัว... สถานีเพลง 6D เปิดเอาเองนะครับ จะลงเพลงไว้ให้ยาวๆ 24 ช.ม!</marquee></div>', unsafe_allow_html=True)
+st.markdown('<div class="run-text"><marquee scrollamount="10">อยู่นิ่งๆ ไม่เจ็บตัว... สถานีเพลง
 
-# --- 5. ส่วนของเพื่อน (รูปจะอยู่ล่างสุดจริงๆ) ---
-st.write("---")
-st.subheader("📸 มุมเพื่อนโชว์รูป")
-friend_files = st.file_uploader("globe.jpg", type=['jpg','png','jpeg'], accept_multiple_files=True)
-
-if friend_files:
-    for f in friend_files:
-        st.image(f, use_container_width=True)
-
-# --- 6. คลังเพลง (ดึงจาก GitHub) ---
+# --- 5. คลังเพลง (ดึงจาก GitHub) ---
 st.write("### 💿 รายการเพลงของ อยู่นิ้งๆไม่เจ็บตัว")
 music_files = [f for f in os.listdir('.') if f.endswith('.mp3')]
 
@@ -133,6 +88,7 @@ if music_files:
     st.audio(song)
 else:
     st.error("⚠️ อย่าลืมลงเพลง .mp3 ในหน้าแรกของ GitHub นะครับ")
+
 if friend_files:
     for f in friend_files:
         st.image(f, use_container_width=True)
