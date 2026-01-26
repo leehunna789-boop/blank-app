@@ -24,12 +24,6 @@ st.write("สร้างสรรค์โดย: ช่างใหญ่ (12x
 music_files = [f for f in os.listdir('.') if f.endswith('.mp3')]
 if not os.path.exists(MUSIC_DIR):
     os.makedirs(MUSIC_DIR)
-
-music_files = [f for f in os.listdir(MUSIC_DIR) if f.endswith('.mp3')]
-st.markdown(f"""
-    <div style="background: #1A0000; padding: 20px; border-radius: 15px; border: 1px solid #FF0000;">
-        <p style="color: #FFD700; font-size: 14px; margin-bottom: 10px; text-align: center;">
-            🔊 6D MATRIX SYSTEM: CONTINUOUS MODE
         </p>
         <audio controls autoplay loop style="width: 100%; filter: invert(1); opacity: 0.8;">
             <source src="{audio_url}" type="audio/mp3">
