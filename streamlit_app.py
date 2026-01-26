@@ -1,78 +1,54 @@
 import streamlit as st
-import os
 
 # --- 1. UI Setup: ดำเงา #050505, ขอบม่วง, ตัวหนังสือขาวเงา ---
-st.set_page_config(page_title="BigBoss Healing V2", layout="wide")
+st.set_page_config(page_title="BigBoss Healing V3", layout="wide")
 
 st.markdown("""
     <style>
-    .stApp {
-        background-color: #050505; 
-        color: white;
-        border: 3px solid #8B00FF; 
-        border-radius: 15px;
-    }
-    h1, h2, h3, p, span {
-        color: #ffffff !important;
-        text-shadow: 0px 0px 10px rgba(255,255,255,0.8);
-    }
-    .stSelectbox div[data-baseweb="select"] {
-        border: 2px solid #FF0000 !important; 
-        background-color: #000080 !important; 
-    }
+    .stApp { background-color: #050505; color: white; border: 4px solid #8B00FF; border-radius: 20px; }
+    h1, h2, h3, p { color: white !important; text-shadow: 0px 0px 10px rgba(255,255,255,0.8); }
+    /* กล่องลากไฟล์เพลง (สีน้ำเงิน-แดง) */
+    .stFileUploader section { border: 2px dashed #FF0000 !important; background-color: #000080 !important; color: white !important; }
     </style>
     """, unsafe_allow_html=True)
 
-# --- 2. ส่วนหัวและโลโก้ Globe ---
+# --- 2. ส่วนหัวและโลโก้ ---
 col1, col2, col3 = st.columns([1,1,1])
 with col2:
-    try:
-        st.image("globe.jpg", width=180)
-    except:
-        st.markdown("<h1 style='text-align:center;'>🌐</h1>", unsafe_allow_html=True)
+    try: st.image("globe.jpg", width=180)
+    except: st.title("🌐")
+st.markdown("<h2 style='text-align:center;'>สถานีบำบัดใจ: ระบบลากเพลงลงร่อง</h2>", unsafe_allow_html=True)
 
-st.markdown("<h2 style='text-align:center;'>สถานีบำบัดใจโดยช่างใหญ่</h2>", unsafe_allow_html=True)
-
-# --- 3. แก้ไขจุดที่ Error (SONG_LIST) ---
-# ช่างใหญ่ครับ: ผมใส่ชื่อเพลงและครอบฟันหนูให้แล้ว 
-# เปลี่ยน 'ชื่content://media/external/downloads/1000011777File "/mount/src/blank-app/streamlit_app.py", line 48
-  SONG_LIST = {https://github.com/leehunna789-boop/blank-app/commit/9ec096604522ac0148466ba0f63ee5561f196c9b
-                                                                    ^
-SyntaxError: invalid decimal literalอไฟล์เพลง.mp3' เป็นชื่อไฟล์จริงๆ ใน GitHub ของช่างใหญ่นะครับ
-SONG_LIST = {
-    "บทเพลงฮีลใจของช่างใหญ่": "https://raw.githubusercontent.com/leehunna789-boop/blank-app/main/ชื่อไฟล์เพลง.mp3"
-}
-
+# --- 3. Logic: เครื่องเล่นเพลงแบบลากวาง ---
 st.write("---")
-selected_song = st.selectbox("💿 เลือกบทเพลงบรรเลง:", list(SONG_LIST.keys()))
+st.markdown("### 🎵 ลากไฟล์เพลง .mp3 ของช่างใหญ่มาวางที่นี่")
+# รองรับการลากทีละหลายเพลง (สูงสุด 20 เพลงตามที่ช่างใหญ่ต้องการ)
+uploaded_songs = st.file_uploader("ลากไฟล์เพลงจากเครื่องมาวางได้เลยครับ (MP3)", type=['mp3'], accept_multiple_files=True)
 
-# เล่นเพลง (บินแน่นอน)
-audio_url = SONG_LIST[selected_song]
-st.audio(audio_url, format="audio/mp3")
+if uploaded_songs:
+    # สร้างรายการชื่อเพลงให้เลือกเล่น
+    song_names = [song.name for song in uploaded_songs]
+    selected_song_name = st.selectbox("💿 เลือกเพลงที่จะเล่นตอนนี้:", song_names)
+    
+    # ค้นหาไฟล์ที่เลือกและเล่น
+    for song in uploaded_songs:
+        if song.name == selected_song_name:
+            st.audio(song, format="audio/mp3", autoplay=True)
+            st.success(f"กำลังเล่นร่องเพลง: {song.name}")
+else:
+    st.warning("⚠️ ยังไม่มีเพลงในเครื่องเล่น... ช่างใหญ่ลากไฟล์เพลงมาวางได้เลยครับ!")
 
-# --- 4. ส่วนสำหรับเพื่อนๆ อัพโหลดไฟล์ ---
+# --- 4. ส่วนสำหรับเพื่อนๆ (รูปภาพ/วิดีโอ) ---
 st.divider()
-st.subheader("📸 ร่วมแบ่งปันภาพความสุขของคุณ")
-uploaded_files = st.file_uploader(
-    "เลือกไฟล์รูปภาพหรือวิดีโอจากเครื่องคุณ:",
-    type=['png', 'jpg', 'jpeg', 'mp4'],
-    accept_multiple_files=True
-)
+st.subheader("📸 พื้นที่แชร์ภาพความสุข")
+uploaded_media = st.file_uploader("ลากรูปภาพหรือวิดีโอมาวาง:", type=['png', 'jpg', 'jpeg', 'mp4'], accept_multiple_files=True, key="media")
 
-if uploaded_files:
+if uploaded_media:
     cols = st.columns(2)
-    for index, file in enumerate(uploaded_files):
-        with cols[index % 2]:
-            if file.type.startswith('image'):
-                st.image(file, use_container_width=True)
-            elif file.type.startswith('video'):
-                st.video(file)
+    for i, file in enumerate(uploaded_media):
+        with cols[i % 2]:
+            if file.type.startswith('image'): st.image(file, use_container_width=True)
+            else: st.video(file)
 
-# --- 5. ตัวหนังสือวิ่ง ---
-st.markdown("""
-    <div style="background: rgba(255,255,255,0.1); padding: 5px; border-top: 2px solid #8B00FF; margin-top:20px;">
-        <marquee scrollamount="7" style="color: white; font-weight: bold;">
-            ..ฟังเพลงอยู่นิ้งๆไม่เจ็บตัว..ตลอด 24 ชั่วโมง... ✨ 🟢 ✨ สร้างความสงบสุข ฮิวใจนิดๆ โดยช่างใหญ่...
-        </marquee>
-    </div>
-    """, unsafe_allow_html=True)
+# --- 5. ตัวหนังสือวิ่ง Marquee ---
+st.markdown('<div style="border-top:2px solid #8B00FF; margin-top:20px;"><marquee scrollamount="8" style="color:white; font-weight:bold; padding:10px;">..ลากเพลงลงร่อง..ฟังเพลงอยู่นิ้งๆไม่เจ็บตัว..ตลอด 24 ชั่วโมง... ✨ 🟢 ✨ โดยช่างใหญ่...</marquee></div>', unsafe_allow_html=True)
