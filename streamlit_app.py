@@ -17,7 +17,11 @@ col1, col2, col3 = st.columns([1,1,1])
 with col2:
     try: st.image("globe.jpg", width=180)
     except: st.title("🌐")
-st.markdown("<h2 style='text-align:center;'>สถานีบำบัดใจ: ระบบลากเพลงลงร่อง</h2>", unsafe_allow_html=True)
+st.markdown("<h2 style='text-align:center;'>สถานีบำบัดใจ: อยู่นิ้งๆไม่่เจ็บตัว</h2>", unsafe_allow_html=True)
+
+
+# --- 5. ตัวหนังสือวิ่ง Marquee ---
+st.markdown('<div style="border-top:2px solid #8B00FF; margin-top:20px;"><marquee scrollamount="8" style="color:white; font-weight:bold; padding:10px;">..ลากเพลงลงร่อง..ฟังเพลงอยู่นิ้งๆไม่เจ็บตัว..ตลอด 24 ชั่วโมง... ✨ 🟢 ✨ โดยช่างใหญ่...</marquee></div>', unsafe_allow_html=True)
 
 # --- 3. Logic: เครื่องเล่นเพลงแบบลากวาง ---
 st.write("---")
