@@ -5,7 +5,25 @@ import streamlit as st
 
 # --- โค้ด HTML สำหรับเครื่องเล่นเพลง Autoplay + Loop ---
 audio_url = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" # ลิงก์เพลงของลูกพี่
+# --- ตั้งค่าหน้าตาเครื่องเล่น ---
+st.set_page_config(page_title="ช่างใหญ่ Smooth Player", layout="wide")
 
+st.markdown("""
+    <style>
+    .main { background-color: #0e1117; color: #ffffff; }
+    .stAudio { width: 100%; border-radius: 20px; }
+    </style>
+    """, unsafe_allow_html=True)
+
+st.title("🎵 เครื่องเล่นเพลง R&B บำบัด (สูตร 10 วินาที)")
+st.write("สร้างสรรค์โดย: ช่างใหญ่ (12x12 System)")
+
+# --- จัดการไฟล์ ---
+MUSIC_DIR = "my_music" # โฟลเดอร์เพลงของช่างใหญ่
+if not os.path.exists(MUSIC_DIR):
+    os.makedirs(MUSIC_DIR)
+
+songs = [f for f in os.listdir(MUSIC_DIR) if f.endswith('.mp3')]
 st.markdown(f"""
     <div style="background: #1A0000; padding: 20px; border-radius: 15px; border: 1px solid #FF0000;">
         <p style="color: #FFD700; font-size: 14px; margin-bottom: 10px; text-align: center;">
