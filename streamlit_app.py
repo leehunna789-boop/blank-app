@@ -87,7 +87,8 @@ st.sidebar.markdown("""
     .blink-dot { height: 15px; width: 15px; background-color: #00ff00; border-radius: 50%; display: inline-block; animation: blink 2s infinite; }
     </style>
     <p><span class="blink-dot"></span> <b>สถานะการบำบัด: ปกติ</b></p>
-    """, unsafe_allow_html=True)import streamlit as st
+    """, unsafe_allow_html=True)
+import streamlit as st
 import time
 
 # --- 1. UI Setup: ดำเงา #050505, ขอบม่วง, ตัวหนังสือขาวเงา ---
