@@ -13,7 +13,7 @@ if music_files:
     st.audio(song)
     <style>
     .main { background-color: #0e1117; color: #ffffff; }
-    .stAudio { width: 100%; border-radius: 20px; }
+
     </style>
     """, unsafe_allow_html=True)
 
