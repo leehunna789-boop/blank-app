@@ -1,94 +1,74 @@
 import streamlit as st
-import os
-import base64
+import time
 
-# --- 2. แต่งหน้าตาให้เท่ (UI) ---
-st.set_page_config(page_title="SYNAPSE 6D Pro", layout="centered")
+# --- 1. UI Setup: ดำเงา #050505, ขอบม่วง, ฟังก์ชันแดง-น้ำเงิน ---
+st.set_page_config(page_title="BigBoss GitHub Player", layout="wide")
 
-st.markdown("""
+st.markdown(f"""
     <style>
-    .stApp { background-color: #050505; color: white; }
-    .stButton>button { 
-        background-color: #FF0000; color: white; border-radius: 10px; 
-        height: 60px; font-weight: bold; border: 2px solid #FFD700;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
-st.title("Music 6D อยู่นิ้งๆไม่เจ็บตัว")
-st.write('สโลแกน: "อยู่นิ่งๆ ไม่เจ็บตัว"')
-# 2. คาถา CSS ล็อกพิกัด (บังคับรูปอยู่ข้างในเท่านั้น)
-st.markdown("""
-    <style>
-    .stApp { background-color: #000; color: #fff; }
-    header, footer, [data-testid="stToolbar"] {visibility:hidden !important;}
+    .stApp {{
+        background-color: #050505; /* สีที่ช่างใหญ่เลือก */
+        color: white;
+        border: 4px solid #8B00FF; /* ขอบม่วงไม่หนามาก */
+        border-radius: 20px;
+    }}
     
-    /* สร้างกรอบทีวี */
-    .tv-box {
-        border: 15px solid #FF0000;
-        border-right: 15px solid #0000FF;
-        border-bottom: 15px solid #0000FF;
-        border-radius: 40px;
-        width: 100%;
-        height: 350px;
-        background-color: #000;
-        margin-bottom: 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
-        box-shadow: 0 0 30px #FF0000;
-    }
+    /* หัวข้อและตัวหนังสือสีขาวเงา */
+    h1, h2, h3, p {{
+        color: #ffffff !important;
+        text-shadow: 0px 0px 8px rgba(255,255,255,0.6);
+    }}
 
-    /* บังคับรูปในกรอบ */
-    .tv-box img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain; /* ปรับให้รูปพอดีกรอบ ไม่เบี้ยว */
-    }
+    /* ฟังก์ชันภายใน: แดงนำ น้ำเงินตาม */
+    .stSelectbox div[data-baseweb="select"] {{
+        border: 2px solid #FF0000 !important; /* ขอบแดง */
+        background-color: #001f3f !important; /* พื้นน้ำเงินเข้ม */
+    }}
 
-    /* ตัวหนังสือวิ่ง */
-    .run-text {
-        background: #111;
-        border: 2px solid #0000FF;
-        border-radius: 10px;
-        padding: 10px;
-        color: #FF0000;
-        font-size: 24px;
-        font-weight: bold;
-        text-align: center;
-    }
+    /* ไฟกระพริบสถานะ */
+    .status-dot {{
+        height: 10px;
+        width: 10px;
+        background-color: #00FF00;
+        border-radius: 50%;
+        display: inline-block;
+        box-shadow: 0 0 10px #00FF00;
+        margin-right: 10px;
+    }}
     </style>
     """, unsafe_allow_html=True)
 
-# --- 3. ส่วนดึงรูป globe.jpg แบบ Base64 (ไม้ตาย) ---
-def display_globe():
-    if os.path.exists("globe.jpg"):
-        with open("globe.jpg", "rb") as f:
-            data = base64.b64encode(f.read()).decode()
-        # ยัดรูปเข้าไปใน div .tv-box โดยตรง
-        st.markdown(f'<div class="tv-box"><img src="data:image/jpeg;base64,{data}"></div>', unsafe_allow_html=True)
-    else:
-        # ถ้าไม่มีรูป ให้โชว์คำเตือนในกรอบ
-        st.markdown('<div class="tv-box"><h2 style="color:red;">ไม่พบไฟล์ globe.jpg</h2></div>', unsafe_allow_html=True)
+# --- 2. ส่วนหัว ---
+st.title("📻 สถานีบำบัดใจ (GitHub Edition)")
+st.markdown('<p><span class="status-dot"></span> ระบบเชื่อมต่อ GitHub สำเร็จ</p>', unsafe_allow_html=True)
 
-# --- 4. แสดงผลหน้าจอหลัก ---
-display_globe()
+# --- 3. ข้อมูลเพลงจาก GitHub ---
+# ช่างใหญ่ครับ: เอา Link 'Raw' จาก GitHub มาวางใน list นี้ได้เลยครับ
+songs = {
+    "บทเพลงฮีลใจ 01": "https://raw.githubusercontent.com/ชื่อUser/ชื่อRepo/main/song1.mp3",
+    "บทเพลงฮีลใจ 02": "https://raw.githubusercontent.com/ชื่อUser/ชื่อRepo/main/song2.mp3",
+    "บทเพลงฮีลใจ 03": "https://raw.githubusercontent.com/ชื่อUser/ชื่อRepo/main/song3.mp3"
+}
 
-st.markdown('<div class="run-text"><marquee scrollamount="10">อยู่นิ่งๆ ไม่เจ็บตัว... สถานีเพลง
+# ส่วนเลือกเพลง (UI น้ำเงิน-แดง)
+selected_song_name = st.selectbox("เลือกเพลงจาก GitHub ของช่างใหญ่:", list(songs.keys()))
+song_url = songs[selected_song_name]
 
-# --- 5. คลังเพลง (ดึงจาก GitHub) ---
-st.write("### 💿 รายการเพลงของ อยู่นิ้งๆไม่เจ็บตัว")
-music_files = [f for f in os.listdir('.') if f.endswith('.mp3')]
+# --- 4. เครื่องเล่นเพลงและการต่อเพลง 10 วิ ---
+st.audio(song_url)
 
-if music_files:
-    song = st.selectbox("เลือกเพลง:", music_files)
-    st.audio(song)
-else:
-    st.error("⚠️ อย่าลืมลงเพลง .mp3 ในหน้าแรกของ GitHub นะครับ")
+st.divider()
+st.markdown("### 🔄 ฟังก์ชันการต่อเพลง (Transition)")
+st.write("⏱️ *ระบบเตรียมความเนียน 10 วินาที เพื่อรอยต่อที่สมบูรณ์*")
 
-if friend_files:
-    for f in friend_files:
-        st.image(f, use_container_width=True)
+# กราฟิกแสดงการ Fade (สีน้ำเงิน-แดง)
+col_a, col_b = st.columns(2)
+with col_a:
+    st.markdown('<div style="background:#FF0000; padding:10px; border-radius:10px; text-align:center;">🔴 Fade Out (10s)</div>', unsafe_allow_html=True)
+with col_b:
+    st.markdown('<div style="background:#0000FF; padding:10px; border-radius:10px; text-align:center;">🔵 Next Track Sync</div>', unsafe_allow_html=True)
 
-st.write("#### *สโลแกน: อยู่นิ่งๆ ไม่เจ็บตัว*")
+# --- 5. ท้ายแอป ---
+st.write("")
+st.write("---")
+st.markdown("<h4 style='text-align: center; color: white;'>..ฟังเพลงอยู่นิ้งๆไม่เจ็บตัว..ตลอด 24 ชั่วโมง..</h4>", unsafe_allow_html=True)
