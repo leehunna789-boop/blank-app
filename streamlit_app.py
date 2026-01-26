@@ -35,7 +35,10 @@ st.markdown("<h2 style='text-align:center;'>สถานีบำบัดใจ
 
 # --- 3. แก้ไขจุดที่ Error (SONG_LIST) ---
 # ช่างใหญ่ครับ: ผมใส่ชื่อเพลงและครอบฟันหนูให้แล้ว 
-# เปลี่ยน 'ชื่อไฟล์เพลง.mp3' เป็นชื่อไฟล์จริงๆ ใน GitHub ของช่างใหญ่นะครับ
+# เปลี่ยน 'ชื่content://media/external/downloads/1000011777File "/mount/src/blank-app/streamlit_app.py", line 48
+  SONG_LIST = {https://github.com/leehunna789-boop/blank-app/commit/9ec096604522ac0148466ba0f63ee5561f196c9b
+                                                                    ^
+SyntaxError: invalid decimal literalอไฟล์เพลง.mp3' เป็นชื่อไฟล์จริงๆ ใน GitHub ของช่างใหญ่นะครับ
 SONG_LIST = {
     "บทเพลงฮีลใจของช่างใหญ่": "https://raw.githubusercontent.com/leehunna789-boop/blank-app/main/ชื่อไฟล์เพลง.mp3"
 }
