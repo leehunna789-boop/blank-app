@@ -3,12 +3,14 @@ import os
 import base64
 import streamlit as st
 
-# --- โค้ด HTML สำหรับเครื่องเล่นเพลง Autoplay + Loop ---
-audio_url = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" # ลิงก์เพลงของลูกพี่
-# --- ตั้งค่าหน้าตาเครื่องเล่น ---
-st.set_page_config(page_title="ช่างใหญ่ Smooth Player", layout="wide")
 
-st.markdown("""
+# --- 6. คลังเพลง (ดึงจาก GitHub) ---
+st.write("### 💿 รายการเพลงของ อยู่นิ้งๆไม่เจ็บตัว")
+music_files = [f for f in os.listdir('.') if f.endswith('.mp3')]
+
+if music_files:
+    song = st.selectbox("เลือกเพลง:", music_files)
+    st.audio(song)
     <style>
     .main { background-color: #0e1117; color: #ffffff; }
     .stAudio { width: 100%; border-radius: 20px; }
