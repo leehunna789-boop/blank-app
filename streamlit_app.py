@@ -49,6 +49,42 @@ playlist_id = "PL6S211I3urvpt47sv8mhbexif2YOzs2gO"
 embed_url = f"https://www.youtube.com/embed/videoseries?list={playlist_id}"
 # --- [ 1. เส้นคั่นแยกส่วน ] ---
 st.divider()
+import streamlit as st
+
+# --- ส่วนหัวของแอป ---
+st.title("S.S.S Music Player")
+st.write("ฟังเพลงจาก YouTube ของผม และแชร์รูป/วิดีโอของคุณได้ที่นี่!")
+
+# --- 1. ส่วนเล่นเพลงจาก YouTube ของคุณ ---
+# คุณสามารถเปลี่ยน URL เป็นเพลย์ลิสต์ของคุณได้เลย
+url = "https://www.youtube.com/watch?v=YOUR_VIDEO_ID" 
+st.video(url)
+
+st.markdown("---")
+
+# --- 2. ออฟชั่นเพิ่มรูปภาพ (Upload Image) ---
+st.subheader("📸 เพิ่มรูปภาพของคุณ")
+uploaded_image = st.file_uploader("เลือกไฟล์รูปภาพ...", type=["jpg", "jpeg", "png"])
+
+if uploaded_image is not None:
+    # แสดงรูปที่อัปโหลด
+    st.image(uploaded_image, caption='รูปภาพของคุณ', use_column_width=True)
+    st.success("โหลดรูปภาพสำเร็จ!")
+
+st.markdown("---")
+
+# --- 3. ออฟชั่นเพิ่มวิดีโอ (Upload Video) ---
+st.subheader("🎥 เพิ่มวิดีโอของคุณ")
+uploaded_video = st.file_uploader("เลือกไฟล์วิดีโอ...", type=["mp4", "mov", "avi"])
+
+if uploaded_video is not None:
+    # แสดงวิดีโอที่อัปโหลด
+    st.video(uploaded_video)
+    st.success("โหลดวิดีโอสำเร็จ!")
+
+# --- สโลแกนประจำตัว ---
+st.sidebar.markdown("---")
+st.sidebar.write('**สโลแกน:** "อยู่นิ่งๆ ไม่เจ็บตัว"')
 
 # --- [ 2. ออฟชัน: ปุ่มแชร์สถานี ] ---
 st.subheader("📢 แชร์สถานีนี้ให้เพื่อน")
