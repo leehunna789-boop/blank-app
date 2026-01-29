@@ -92,6 +92,42 @@ st.markdown("""
     </style>
     <marquee class="marquee">📸 ยินดีต้อนรับเข้าสู่ส่วนอัปโหลดรูปภาพส่วนตัว - ลองวางรูปสวยๆ ของคุณได้ที่นี่ 📸</marquee>
 """, unsafe_allow_html=True)
+# --- เริ่มส่วนปุ่มลูกเล่นข้างล่าง YouTube ---
+st.write("---")
+st.subheader("🕹️ แผงควบคุมสถานี (กดเล่นได้ครับ)")
+
+# 1. แถวปุ่มกดแล้วมีเอฟเฟกต์
+col_btn1, col_btn2, col_btn3 = st.columns(3)
+with col_btn1:
+    if st.button('🎊 ฉลอง!'):
+        st.balloons()
+with col_btn2:
+    if st.button('❄️ หิมะตก'):
+        st.snow()
+with col_btn3:
+    if st.button('🔔 ทักทาย'):
+        st.toast('อยู่นิ้งๆไม่เจ็บตัว ยินดีต้อนรับครับ!', icon='🙏')
+
+# 2. แถวสถิติแบบเท่ๆ (รกๆ แบบดูดี)
+st.write("---")
+col_stat1, col_stat2, col_stat3 = st.columns(3)
+col_stat1.metric("คนฟังขณะนี้", "1,250", "+52")
+col_stat2.metric("ความชัด", "4K", "Ultra")
+col_stat3.metric("สถานะ", "Online", "🟢")
+
+# 3. ปุ่ม LINE แบบใหญ่เบิ้ม
+st.write("---")
+st.subheader("💬 ติดต่ออยู่นิ้งๆไม่เจ็บตัว")
+line_id = "ta0970801941" 
+st.link_button("🟢 กดแอดไลน์มาคุยกันได้เลย (ขอเพลงได้นะ)", f"https://line.me/ti/p/~{line_id}", use_container_width=True)
+
+# 4. ข้อความวิ่งปิดท้ายแบบ Retro
+st.markdown("""
+    <marquee style='color: #00FF00; font-family: Courier; font-size: 20px;'> 
+    ขอบคุณที่รับชมสถานีเพลงช่างใหญ่... อยู่นิ่งๆ ไม่เจ็บตัว... เพลงดี ดนตรีเพราะ... 🚀 🎧 🎶
+    </marquee>
+    """, unsafe_allow_html=True)
+# --- จบส่วนปุ่มลูกเล่น ---
 
 # (ตามด้วยโค้ดอัปโหลดรูปของคุณ...)
 
