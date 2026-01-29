@@ -47,6 +47,29 @@ st.subheader("📺 รายการเพลงแนะนำ (กดฟั�
 # ดึงเฉพาะ ID ของ Playlist มาใช้งาน
 playlist_id = "PL6S211I3urvpt47sv8mhbexif2YOzs2gO"
 embed_url = f"https://www.youtube.com/embed/videoseries?list={playlist_id}"
+# --- [ 1. เส้นคั่นแยกส่วน ] ---
+st.divider()
+
+# --- [ 2. ออฟชัน: ปุ่มแชร์สถานี ] ---
+st.subheader("📢 แชร์สถานีนี้ให้เพื่อน")
+st.link_button("🔵 แชร์ไปยัง Facebook", "https://www.facebook.com/sharer/sharer.php?u=URL_แอปของคุณ")
+
+# --- [ 3. ออฟชัน: แบบสำรวจแนวเพลง ] ---
+st.write("") # เว้นบรรทัดนิดหน่อย
+genre = st.radio("🎸 รอบหน้าอยากฟังแนวไหนเป็นพิเศษ?", ["ลูกทุ่งอินดี้", "สตริงเก่า", "เพื่อชีวิต"], horizontal=True)
+if st.button("บันทึกโหวต"):
+    st.toast(f"รับทราบครับ! เดี๋ยวจัดแนว {genre} ให้")
+
+# --- [ 4. ออฟชัน: กล่องรับข้อความทิ้งไว้ ] ---
+st.write("")
+user_note = st.text_area("📝 ฝากข้อความถึงดีเจ (พิมพ์ทิ้งไว้ได้เลย):", placeholder="เช่น... วันนี้เพลงเพราะมากครับ")
+if user_note:
+    st.info(f"ข้อความของคุณ: '{user_note}' ถูกบันทึกแล้ว (ในใจดีเจ)")
+
+# --- [ 5. ปุ่ม LINE ของคุณ (วางไว้ล่างสุดเสมอ) ] ---
+st.write("---")
+line_link = "https://line.me/ti/p/e-8n-__If_" 
+st.link_button("🟢 แตะเพื่อแชทกับเรา (LINE)", line_link)
 
 st.markdown(f"""
     <iframe width="100%" height="450" src="{embed_url}" 
