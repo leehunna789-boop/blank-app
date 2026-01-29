@@ -78,22 +78,22 @@ url = "https://youtu.be/gJ-Sup2CCYA?si=sYnOhOkE1rsr-_X4"
 st.video(url)
 
 st.markdown("---")
-# --- ตัวหนังสือวิ่งคั่นส่วนวิดีโอ ---
+# --- ตัวหนังสือวิ่งคั่นส่วนรูปภาพ ---
 st.markdown("""
     <style>
-    .marquee-video {
+    .marquee {
         width: 100%;
-        background-color: #0000FF; /* เปลี่ยนเป็นสีน้ำเงิน */
-        color: white;
+        background-color: #FF0000; /* สีพื้นหลัง (สีแดง) */
+        color: white; /* สีตัวอักษร */
         padding: 5px;
         font-weight: bold;
         border-radius: 5px;
     }
     </style>
-    <marquee class="marquee-video" scrollamount="7">🎬 ส่วนอัปโหลดวิดีโอส่วนตัว - ทดสอบไฟล์วิดีโอของคุณได้ที่นี่ 🎬</marquee>
+    <marquee class="marquee">📸 ยินดีต้อนรับเข้าสู่ส่วนอัปโหลดรูปภาพส่วนตัว - ลองวางรูปสวยๆ ของคุณได้ที่นี่ 📸</marquee>
 """, unsafe_allow_html=True)
 
-# (ตามด้วยโค้ดอัปโหลดวิดีโอของคุณ...)
+# (ตามด้วยโค้ดอัปโหลดรูปของคุณ...)
 
 # --- 2. ออฟชั่นเพิ่มรูปภาพ (Upload Image) ---
 st.subheader("📸 เพิ่มรูปภาพของคุณ")
@@ -155,6 +155,23 @@ if user_note:
 st.write("---")
 line_link = "https://line.me/ti/p/e-8n-__If_" 
 st.link_button("🟢 แตะเพื่อแชทกับเรา (LINE)", line_link)
+# --- ตัวหนังสือวิ่งคั่นส่วน YouTube ---
+st.markdown("""
+    <style>
+    .marquee-yt {
+        width: 100%;
+        background-color: #FFD700; /* สีทอง */
+        color: black; /* ตัวหนังสือสีดำจะอ่านง่ายบนพื้นสีทอง */
+        padding: 8px;
+        font-weight: bold;
+        border-radius: 5px;
+        font-size: 18px;
+    }
+    </style>
+    <marquee class="marquee-yt" scrollamount="6">🔴 กำลังรับฟังผลงานเพลงจากช่อง อยู่นิ้งๆไม่เจ็บตัว - ขอให้มีความสุขกับการรับฟังครับ 🔴</marquee>
+""", unsafe_allow_html=True)
+
+# (ตามด้วยโค้ด st.video(url) ของคุณ...)
 
 st.markdown(f"""
     <iframe width="100%" height="450" src="{embed_url}" 
