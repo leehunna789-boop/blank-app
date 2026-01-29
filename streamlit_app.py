@@ -67,7 +67,7 @@ st.markdown("""
 
 # 5. วิธีใหม่: ฝัง YouTube Player (วิธีนี้จะขึ้นแน่นอน 100%)
 # ผมใช้ ID เพลย์ลิสต์ของช่างใหญ่โดยตรงเลยครับ
-st.subheader("📺 รายการเพลง (กดฟังยาว ต่อเนื้อง24 ชม อัปเด็ดตลอดเวลา)")
+st.subheader("📺 รายการเพลง (กดฟังยาวๆ ต่อเนื้อง24 ชม อัปเด็ดตลอดเวลา)")
 playlist_id = "PL6S211I3urvpt47sv8mhbexif2YOzs2gO"
 embed_code = f"""
 <iframe width="100%" height="400" src="https://www.youtube.com/embed/videoseries?list={playlist_id}" 
