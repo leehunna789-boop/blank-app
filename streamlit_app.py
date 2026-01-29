@@ -76,6 +76,30 @@ st.markdown("""
 # คุณสามารถเปลี่ยน URL เป็นเพลย์ลิสต์ของคุณได้เลย
 url = "https://youtu.be/gJ-Sup2CCYA?si=sYnOhOkE1rsr-_X4" 
 st.video(url)
+# --- จอที่ 3: แนะนำช่องช่างใหญ่ + ปุ่มติดตาม ---
+st.write("---")
+st.markdown("<h2 style='color: #FF0000;'>📺 ยินดีต้อนรับสู่บ้านช่างใหญ่</h2>", unsafe_allow_html=True)
+
+# 1. จอวิดีโอตัวอย่างของช่อง (แนะนำเอาคลิปที่ยาวที่สุดหรือเด่นที่สุดมาใส่ครับ)
+channel_trailer_url = "https://www.youtube.com/watch?v=ไอดีคลิปในช่องช่างใหญ่"
+st.video(channel_trailer_url)
+
+# 2. ปุ่มติดตามแบบพรีเมียม (UI รกๆ แต่สวย)
+st.write("📢 **กดปุ่มด้านล่างเพื่อติดตามความมันส์!**")
+
+col_sub1, col_sub2 = st.columns([1, 1])
+
+with col_sub1:
+    # ปุ่มไปหน้าวิดีโอทั้งหมด
+    st.link_button("📂 ดูวิดีโอทั้งหมดในช่อง", "https://www.youtube.com/channel/UC6S211I3urvpt47sv8mhbexif2YOzs2gO/videos", use_container_width=True)
+
+with col_sub2:
+    # ปุ่มกด Subscribe โดยตรง (ถ้าเพื่อนกดปุ่มนี้ มันจะเด้งไปหน้ายืนยันการติดตาม)
+    sub_url = "https://www.youtube.com/channel/UC6S211I3urvpt47sv8mhbexif2YOzs2gO?sub_confirmation=1"
+    st.link_button("🔴 กดติดตาม (SUBSCRIBE)", sub_url, use_container_width=True)
+
+# 3. ใส่ตัวเลขสมมติเพิ่มความขลัง
+st.markdown("<p style='text-align: center; color: gray;'>ยอดการรับชมรวม: 1,472+ ครั้ง (📀📲)</p>", unsafe_allow_html=True)
 
 st.markdown("---")
 # --- ตัวหนังสือวิ่งคั่นส่วนรูปภาพ ---
