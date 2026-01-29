@@ -54,6 +54,23 @@ import streamlit as st
 # --- ส่วนหัวของแอป ---
 st.title("S.S.S Music Player")
 st.write("ฟังเพลงจาก YouTube ของผม และแชร์รูป/วิดีโอของคุณได้ที่นี่!")
+# --- ตัวหนังสือวิ่งคั่นส่วน YouTube ---
+st.markdown("""
+    <style>
+    .marquee-yt {
+        width: 100%;
+        background-color: #FFD700; /* สีทอง */
+        color: black; /* ตัวหนังสือสีดำจะอ่านง่ายบนพื้นสีทอง */
+        padding: 8px;
+        font-weight: bold;
+        border-radius: 5px;
+        font-size: 18px;
+    }
+    </style>
+    <marquee class="marquee-yt" scrollamount="6">🔴 กำลังรับฟังผลงานเพลงจากช่อง S.S.S Music - ขอให้มีความสุขกับการรับฟังครับ 🔴</marquee>
+""", unsafe_allow_html=True)
+
+# (ตามด้วยโค้ด st.video(url) ของคุณ...)
 
 # --- 1. ส่วนเล่นเพลงจาก YouTube ของคุณ ---
 # คุณสามารถเปลี่ยน URL เป็นเพลย์ลิสต์ของคุณได้เลย
@@ -61,6 +78,22 @@ url = "https://youtu.be/gJ-Sup2CCYA?si=sYnOhOkE1rsr-_X4"
 st.video(url)
 
 st.markdown("---")
+# --- ตัวหนังสือวิ่งคั่นส่วนวิดีโอ ---
+st.markdown("""
+    <style>
+    .marquee-video {
+        width: 100%;
+        background-color: #0000FF; /* เปลี่ยนเป็นสีน้ำเงิน */
+        color: white;
+        padding: 5px;
+        font-weight: bold;
+        border-radius: 5px;
+    }
+    </style>
+    <marquee class="marquee-video" scrollamount="7">🎬 ส่วนอัปโหลดวิดีโอส่วนตัว - ทดสอบไฟล์วิดีโอของคุณได้ที่นี่ 🎬</marquee>
+""", unsafe_allow_html=True)
+
+# (ตามด้วยโค้ดอัปโหลดวิดีโอของคุณ...)
 
 # --- 2. ออฟชั่นเพิ่มรูปภาพ (Upload Image) ---
 st.subheader("📸 เพิ่มรูปภาพของคุณ")
@@ -72,6 +105,22 @@ if uploaded_image is not None:
     st.success("โหลดรูปภาพสำเร็จ!")
 
 st.markdown("---")
+# --- ตัวหนังสือวิ่งคั่นส่วนวิดีโอ ---
+st.markdown("""
+    <style>
+    .marquee-video {
+        width: 100%;
+        background-color: #0000FF; /* เปลี่ยนเป็นสีน้ำเงิน */
+        color: white;
+        padding: 5px;
+        font-weight: bold;
+        border-radius: 5px;
+    }
+    </style>
+    <marquee class="marquee-video" scrollamount="7">🎬 ส่วนอัปโหลดวิดีโอส่วนตัว - ทดสอบไฟล์วิดีโอของคุณได้ที่นี่ 🎬</marquee>
+""", unsafe_allow_html=True)
+
+# (ตามด้วยโค้ดอัปโหลดวิดีโอของคุณ...)
 
 # --- 3. ออฟชั่นเพิ่มวิดีโอ (Upload Video) ---
 st.subheader("🎥 เพิ่มวิดีโอของคุณ")
