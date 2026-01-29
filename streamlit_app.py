@@ -74,14 +74,14 @@ st.markdown("""
 
 # --- 1. ส่วนเล่นเพลงจาก YouTube ของคุณ ---
 # คุณสามารถเปลี่ยน URL เป็นเพลย์ลิสต์ของคุณได้เลย
-url = "https://youtube.com/channel/UC1R7q05iNCx2COiWNGYE1Iw?si=mIfX5u_CYzPbx1Uo" 
+url = "https://youtu.be/cbcuYnyr828?si=gCdCngKZztQVVZCe" 
 st.video(url)
 # --- จอที่ 3: แนะนำช่องช่างใหญ่ + ปุ่มติดตาม ---
 st.write("---")
 st.markdown("<h2 style='color: #FF0000;'>📺 ยินดีต้อนรับสู่ช่อง อยู่นิ้งๆไม่เจ็บตัว</h2>", unsafe_allow_html=True)
 
 # 1. จอวิดีโอตัวอย่างของช่อง (แนะนำเอาคลิปที่ยาวที่สุดหรือเด่นที่สุดมาใส่ครับ)
-channel_trailer_url = "https://www.youtube.com/watch?v=ไอดีคลิปในช่องอยู่นิ้งๆไม่เจ็บตัว"
+channel_trailer_url = "https://youtu.be/Bb3Jtsik3nY?si=Qyz3WtZLcxML3uF_"
 st.video(channel_trailer_url)
 
 # 2. ปุ่มติดตามแบบพรีเมียม (UI รกๆ แต่สวย)
