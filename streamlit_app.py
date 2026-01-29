@@ -75,12 +75,12 @@ title="YouTube video player" frameborder="0"
 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
 allowfullscreen></iframe>
 """
-components.html(embed_code, height=450)
-
-# 6. ปุ่ม LINE (เปลี่ยน YOUR_ID เป็นไอดีไลน์ช่างใหญ่นะครับ)
+# 6. ปุ่ม LINE (ใช้ลิงก์จาก QR Code จะชัวร์ที่สุด)
 st.write("---")
-line_id = "ta0970801941" 
-st.link_button("➖ แตะ LINE ถามได้ทุกเรื่อง คุยโดยตรง", f"https://line.me/ti/p/~{line_id}")
+# เอาลิงก์ที่คุณก๊อปปี้มาจากหน้า QR Code มาวางแทนในเครื่องหมายคำพูดด้านล่างนี้ครับ
+line_qr_link = "https://line.me/ti/p/e-8n-__If_" 
+
+st.link_button("🟢 แตะเพื่อแชทขอเพลง/คุยโดยตรง", line_qr_link)
 
 # 7. ปิดท้าย
 st.caption("© 2026 สถานีเพลงฟังสบายใจ | อยู่นิ้งๆ ไม่เจ็บตัว")
