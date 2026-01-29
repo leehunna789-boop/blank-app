@@ -8,7 +8,7 @@ st.set_page_config(page_title="สถานีเพลงฟังสบาย�
 st.markdown("""
     <style>
     .stApp {
-        background-color: #0E1117;
+        background-color: #050505;
         color: #FFFFFF;
         text-align: center;
     }
@@ -38,7 +38,7 @@ st.markdown("""
         width: 100%;
         overflow: hidden;
         white-space: nowrap;
-        background: #050505; /* สีพื้นหลังแถบวิ่ง */
+        background: #330000; /* สีพื้นหลังแถบวิ่ง */
         padding: 10px 0;
         border-radius: 10px;
         margin-bottom: 20px;
