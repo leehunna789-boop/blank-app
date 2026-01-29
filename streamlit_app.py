@@ -2,85 +2,66 @@ import streamlit as st
 import streamlit.components.v1 as components
 
 # 1. ตั้งค่าหน้าสถานี
-st.set_page_config(page_title="สถานีเพลงฟังสบายใจ ขอเพลงได้ อยู่นิ้งไม่เจ็บตัว", page_icon="🌍", layout="centered")
+st.set_page_config(page_title="สถานีอยู่นิ่งๆ ไม่เจ็บตัว", page_icon="📻", layout="centered")
 
-# 2. แต่ง UI สีมืด-ทอง
+# 2. แต่ง UI สีมืด-ทอง และปุ่ม LINE สีเขียว
 st.markdown("""
     <style>
-    .stApp {
-        background-color: #050505;
-        color: #FFFFFF;
-        text-align: center;
+    .stApp { background-color: #0E1117; color: #FFFFFF; text-align: center; }
+    .stLinkButton > a {
+        background-color: #06C755 !important;
+        color: white !important;
+        border-radius: 30px !important;
+        border: none !important;
+        padding: 18px 35px !important;
+        font-weight: bold !important;
+        font-size: 1.2rem !important;
+        text-decoration: none !important;
+        display: inline-block !important;
+        box-shadow: 0px 4px 15px rgba(6, 199, 85, 0.4);
+        transition: 0.3s;
     }
-    div.stButton > button {
-        background-color: #00B900;
-        color: white;
-        border-radius: 20px;
-        font-weight: bold;
-    }
+    .stLinkButton > a:hover { transform: scale(1.05); background-color: #05b34c !important; }
     </style>
     """, unsafe_allow_html=True)
 
-# 3. ดึงรูปภาพ (เช็คชื่อไฟล์ globe.jpg ให้ตรงกับใน GitHub นะครับ)
+# 3. ส่วนหัวและโลโก้
 try:
-    st.image("globe.jpg", width=300)
+    st.image("globe.jpg", width=250)
 except:
     st.header("🌍")
 
-# 4. ชื่อสถานี
-st.markdown("<h2 style='color: #FFD700;'>📻 STATION: อยู่นิ้งๆไม่เจ็บตัว</h2>", unsafe_allow_html=True)
-st.write("คัดมาให้แล้ว เพลงเน้นๆ เพื่อเพื่อนๆ")
-st.write("---")
-# --- [ส่วนของตัวหนังสือวิ่ง] ---
+st.markdown("<h2 style='color: #FFD700;'>📻 STATION: อยู่นิ่งๆ ไม่เจ็บตัว</h2>", unsafe_allow_html=True)
+
+# 4. ตัวหนังสือวิ่งแจ้งข่าวสาร
 st.markdown("""
-    <style>
-    .marquee-container {
-        width: 100%;
-        overflow: hidden;
-        white-space: nowrap;
-        background: #00B900; /* สีพื้นหลังแถบวิ่ง */
-        padding: 10px 0;
-        border-radius: 10px;
-        margin-bottom: 20px;
-    }
-    .marquee-text {
-        display: inline-block;
-        padding-left: 100%;
-        color: white;
-        font-weight: bold;
-        font-size: 1.1rem;
-        animation: marquee 20s linear infinite;
-    }
-    @keyframes marquee {
-        0%   { transform: translate(0, 0); }
-        100% { transform: translate(-100%, 0); }
-    }
-    </style>
-    <div class="marquee-container">
-        <div class="marquee-text">
-            📢 ยินดีต้อนรับเข้าสู่สถานี อยู่นิ่งๆ ไม่เจ็บตัว ...บอกเรื่องราวชีวิตมาได้เลย เดวจัดเพลงของคุณให้ฟัง ขอเพลงกันเข้ามาได้เลยครับ! 🎵 
-            ทีมงานอยู่่นิ้งๆไม่เจ็บตัว กำลังจัดเตรียมเพลงให้คุณอยู่ 🎧 ขอบคุณที่ติดตามรับฟังครับ ✨
-        </div>
-    </div>
+    <marquee style="color: white; font-weight: bold; background: #050505; padding: 12px; border-radius: 10px; border: 1px solid #FFD700;">
+        📢 ยินดีต้อนรับเข้าสู่สถานี อยู่นิ่งๆ ไม่เจ็บตัว ...ทักแชทมาบอกเรื่องราวชีวิตได้เลย เดวจัดเพลงให้ฟังครับ! 🎵 🎧 ขอบคุณที่ติดตามรับฟังครับ ✨
+    </marquee>
     """, unsafe_allow_html=True)
 
-
-# 5. วิธีใหม่: ฝัง YouTube Player (วิธีนี้จะขึ้นแน่นอน 100%)
-# ผมใช้ ID เพลย์ลิสต์ของช่างใหญ่โดยตรงเลยครับ
-st.subheader("📺 รายการเพลง (กดฟังยาวๆ ต่อเนื้อง24 ชม อัปเด็ดตลอดเวลา)")
-playlist_id = "PL6S211I3urvpt47sv8mhbexif2YOzs2gO"
-embed_code = f"""
-<iframe width="100%" height="400" src="https://www.youtube.com/embed/videoseries?list={playlist_id}" 
-title="YouTube video player" frameborder="0" 
-allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-allowfullscreen></iframe>
-"""
-# 6. ปุ่ม LINE (ใช้ลิงก์จาก QR Code จะชัวร์ที่สุด)
 st.write("---")
-# เอาลิงก์ที่คุณก๊อปปี้มาจากหน้า QR Code มาวางแทนในเครื่องหมายคำพูดด้านล่างนี้ครับ
-line_qr_link = "https://line.me/ti/p/e-8n-__If_" 
 
-st.link_button("🟢 แตะเพื่อแชทขอเพลง/คุยโดยตรง", line_qr_link)
+# 5. YouTube Playlist (ใช้ลิงก์ที่คุณส่งมาล่าสุด)
+st.subheader("📺 รายการเพลงแนะนำ (กดฟังต่อเนื่อง)")
+# ดึงเฉพาะ ID ของ Playlist มาใช้งาน
+playlist_id = "PL6S211I3urvpt47sv8mhbexif2YOzs2gO"
+embed_url = f"https://www.youtube.com/embed/videoseries?list={playlist_id}"
+
+st.markdown(f"""
+    <iframe width="100%" height="450" src="{embed_url}" 
+    title="YouTube Playlist" frameborder="0" 
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+    allowfullscreen style="border-radius:15px; border: 2px solid #333;"></iframe>
+    """, unsafe_allow_html=True)
+
+# 6. ปุ่ม LINE แชทสด (ใช้ลิงก์ QR Code ที่ถูกต้อง)
+st.write("---")
+st.subheader("💬 คุยกับเรา / ขอเพลงผ่าน LINE")
+line_link = "https://line.me/ti/p/e-8n-__If_" 
+
+st.link_button("🟢 แตะเพื่อเพิ่มเพื่อนและส่งแชทคุยกับเรา", line_link)
 
 # 7. ปิดท้าย
-st.caption("© 2026 สถานีเพลงฟังสบายใจ | อยู่นิ้งๆ ไม่เจ็บตัว")
+st.write("")
+st.caption("© 2026 สถานีเพลงฟังสบายใจ | อยู่นิ่งๆ ไม่เจ็บตัว")
