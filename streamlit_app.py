@@ -57,7 +57,7 @@ st.write("ฟังเพลงจาก YouTube ของผม และแช
 
 # --- 1. ส่วนเล่นเพลงจาก YouTube ของคุณ ---
 # คุณสามารถเปลี่ยน URL เป็นเพลย์ลิสต์ของคุณได้เลย
-url = "https://www.youtube.com/watch?v=YOUR_VIDEO_ID" 
+url = "https://youtu.be/gJ-Sup2CCYA?si=sYnOhOkE1rsr-_X4" 
 st.video(url)
 
 st.markdown("---")
