@@ -38,7 +38,7 @@ st.markdown("""
         width: 100%;
         overflow: hidden;
         white-space: nowrap;
-        background: #1A0000; /* สีพื้นหลังแถบวิ่ง */
+        background: #00B900; /* สีพื้นหลังแถบวิ่ง */
         padding: 10px 0;
         border-radius: 10px;
         margin-bottom: 20px;
