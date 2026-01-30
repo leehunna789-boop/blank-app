@@ -1,5 +1,16 @@
 import streamlit as st
 import streamlit.components.v1 as components
+import streamlit as st
+import google.generativeai as genai
+
+# แปะส่วนนี้ไว้เพื่อดึงกุญแจลับจาก Streamlit Secrets (ตอนเอาขึ้น GitHub)
+if "GEMINI_API_KEY" in st.secrets:
+    genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
+else:
+    st.error("อย่าลืมใส่ API Key ใน Settings นะครับ")
+
+model = genai.GenerativeModel('gemini-1.5-flash')
+
 
 # 1. ตั้งค่าหน้าสถานี
 st.set_page_config(page_title="สถานีอยู่นิ่งๆ ไม่เจ็บตัว", page_icon="📻", layout="centered")
@@ -83,6 +94,16 @@ st.markdown("<h2 style='color: #FF0000;'>📺 ยินดีต้อนรั�
 # 1. จอวิดีโอตัวอย่างของช่อง (แนะนำเอาคลิปที่ยาวที่สุดหรือเด่นที่สุดมาใส่ครับ)
 channel_trailer_url = "https://youtu.be/Bb3Jtsik3nY?si=Qyz3WtZLcxML3uF_"
 st.video(channel_trailer_url)
+def ask_ai_for_friend(user_message):
+    # ปรุงแต่งคำสั่ง (Prompt) ให้ AI ตอบตามสไตล์คุณ
+    prompt = f"เพื่อนระบายมาว่า: '{user_message}' ช่วยตอบกลับแบบสั้นๆ นิ่งๆ เข้าใจใจ ให้กำลังใจดีๆ"
+    
+    try:
+        response = model.generate_content(prompt)
+        return response.text
+    except:
+        return "เราอยู่ตรงนี้ข้างๆ เธอนะ... (เกิดข้อผิดพลาดในการเชื่อมต่อ)"
+
 
 # 2. ปุ่มติดตามแบบพรีเมียม (UI รกๆ แต่สวย)
 st.write("📢 **กดปุ่มด้านล่างเพื่อติดตามความมันส์!**")
@@ -97,6 +118,20 @@ with col_sub2:
     # ปุ่มกด Subscribe โดยตรง (ถ้าเพื่อนกดปุ่มนี้ มันจะเด้งไปหน้ายืนยันการติดตาม)
     sub_url = "https://www.youtube.com/channel/UC6S211I3urvpt47sv8mhbexif2YOzs2gO?sub_confirmation=1"
     st.link_button("🔴 กดติดตาม (SUBSCRIBE)", sub_url, use_container_width=True)
+    # สมมติว่าคุณมีช่องรับข้อความอยู่แล้วชื่อ user_text
+if st.button("ระบายความในใจ"):
+    if user_text:
+        with st.spinner('กำลังฟังอย่างตั้งใจ...'):
+            reply = ask_ai_for_friend(user_text)
+            
+            # แสดงคำตอบออกมาในกล่องสวยๆ
+            st.chat_message("assistant").write(reply)
+            
+            # ตรงนี้คุณสามารถเอา "เสียง 3 วิ" ของคุณมาแปะต่อท้ายได้เลย!
+            # เพื่อให้พอตอบเป็นข้อความเสร็จ ก็มีเสียงปลอบใจออกมาพร้อมกัน
+    else:
+        st.info("มีอะไรอยากบอกเราไหม?")
+
 
 # 3. ใส่ตัวเลขสมมติเพิ่มความขลัง
 st.markdown("<p style='text-align: center; color: gray;'>ยอดการรับชมรวม: 41,472 ครั้ง (📀📲)</p>", unsafe_allow_html=True)
