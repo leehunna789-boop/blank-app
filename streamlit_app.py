@@ -1,30 +1,29 @@
 import streamlit as st
 import google.generativeai as genai
 
-# --- [ 1. เชื่อมต่อกุญแจลับและ AI ] ---
+# --- [ 1. เชื่อมต่อกุญแจลับ ] ---
 if "GEMINI_API_KEY" in st.secrets:
     try:
         genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
-        # ระบบค้นหาโมเดลที่ใช้งานได้อัตโนมัติเพื่อป้องกัน Error 404
-        models = [m.name for m in genai.list_models() if 'generateContent' in m.supported_generation_methods]
-        if models:
-            model = genai.GenerativeModel(models[0])
-        else:
-            st.error("กุญแจนี้ไม่มีสิทธิ์เข้าถึงโมเดล")
+        # ใช้ชื่อโมเดลแบบเต็มเพื่อกัน Error 404
+        model = genai.GenerativeModel('models/gemini-1.5-flash')
     except Exception as e:
         st.error(f"ระบบกุญแจขัดข้อง: {e}")
 else:
-    st.error("⚠️ ไม่พบ GEMINI_API_KEY ในช่อง Secrets")
+    st.error("⚠️ ไม่พบกุญแจ! กรุณาใส่ GEMINI_API_KEY ในหน้า Secrets")
 
 def ask_ai_for_friend(user_message):
-    prompt = f"คุณคือเพื่อนที่นิ่งสงบ สโลแกนคือ 'อยู่นิ่งๆ ไม่เจ็บตัว' เพื่อนระบายมาว่า: '{user_message}' ช่วยตอบสั้นๆ นิ่งๆ ให้กำลังใจดีๆ"
+    prompt = f"คุณคือดีเจเพื่อนคู่คิด สโลแกนคือ 'อยู่นิ่งๆ ไม่เจ็บตัว' เพื่อนระบายว่า: '{user_message}' ตอบแบบนิ่งๆ ให้กำลังใจดีๆ"
     try:
         response = model.generate_content(prompt)
         return response.text
     except Exception as e:
-        return f"เราอยู่ตรงนี้ข้างๆ เธอนะ... (ติดปัญหา: {e})"
+        # ดักจับ Error 429 (โควตาเต็ม)
+        if "429" in str(e):
+            return "วันนี้เราคุยกันเยอะแล้วนะเพื่อน... พักผ่อนบ้างนะ เดี๋ยวพรุ่งนี้มาคุยกันใหม่ (โควตาฟรีหมดชั่วคราวครับ)"
+        return f"เรารับฟังอยู่นะ... (ติดปัญหา: {e})"
 
-# --- [ 2. ตั้งค่าหน้าตาแอป ] ---
+# --- [ 2. ตั้งค่าหน้าสถานี ] ---
 st.set_page_config(page_title="สถานีอยู่นิ่งๆ ไม่เจ็บตัว", page_icon="📻", layout="centered")
 
 st.markdown("""
@@ -34,9 +33,8 @@ st.markdown("""
         background-color: #06C755 !important;
         color: white !important;
         border-radius: 30px !important;
-        border: none !important;
-        padding: 15px 25px !important;
         font-weight: bold !important;
+        text-decoration: none !important;
         display: inline-block !important;
     }
     </style>
@@ -50,94 +48,72 @@ except:
 
 st.markdown("<h2 style='color: #FFD700;'>📻 STATION: อยู่นิ่งๆ ไม่เจ็บตัว</h2>", unsafe_allow_html=True)
 
-# ✨ 1. ตัวหนังสือวิ่งบนสุด (Welcome)
-st.markdown("""
-    <marquee style="color: white; font-weight: bold; background: #050505; padding: 12px; border-radius: 10px; border: 1px solid #FFD700;">
-        📢 ยินดีต้อนรับเข้าสู่สถานี อยู่นิ่งๆ ไม่เจ็บตัว ...ทักแชทมาบอกเรื่องราวชีวิตได้เลยครับ ✨ ขอบคุณที่ติดตามรับฟังครับ 🎧
-    </marquee>
-    """, unsafe_allow_html=True)
+# ✨ 1. ตัวหนังสือวิ่งบนสุด
+st.markdown("""<marquee style="color: white; font-weight: bold; background: #050505; padding: 12px; border-radius: 10px; border: 1px solid #FFD700;">📢 ยินดีต้อนรับเข้าสู่สถานี อยู่นิ่งๆ ไม่เจ็บตัว ...ทักแชทระบายเรื่องราวชีวิตได้เลยครับ ✨</marquee>""", unsafe_allow_html=True)
+
+# --- [ 3. YouTube 3 จุด ] ---
+st.write("---")
+# 1. Playlist
+playlist_url = "https://www.youtube.com/embed/videoseries?list=PL6S211I3urvpt47sv8mhbexif2YOzs2gO"
+st.markdown(f'<iframe width="100%" height="400" src="{playlist_url}" frameborder="0" allowfullscreen style="border-radius:15px; border: 2px solid #333;"></iframe>', unsafe_allow_html=True)
+
+# ✨ 2. ตัวหนังสือวิ่งคั่น YouTube 1 (สีทอง)
+st.markdown("<marquee style='background: #FFD700; color: black; padding: 8px; font-weight: bold; border-radius: 5px; margin-top: 10px;'>🔴 กำลังรับฟังผลงานเพลงจากช่อง S.S.S Music 🔴</marquee>", unsafe_allow_html=True)
 
 st.write("---")
-
-# --- [ 3. ส่วน YouTube 3 จุด ] ---
-st.subheader("📺 รายการเพลงแนะนำ (Playlist)")
-playlist_id = "PL6S211I3urvpt47sv8mhbexif2YOzs2gO"
-embed_url = f"https://www.youtube.com/embed/videoseries?list={playlist_id}"
-st.markdown(f'<iframe width="100%" height="400" src="{embed_url}" frameborder="0" allowfullscreen style="border-radius:15px; border: 2px solid #333;"></iframe>', unsafe_allow_html=True)
-
-# ✨ 2. ตัวหนังสือวิ่งคั่น YouTube (สีทอง)
-st.markdown("""
-    <marquee style="background-color: #FFD700; color: black; padding: 8px; font-weight: bold; border-radius: 5px; margin-top: 10px;">
-        🔴 กำลังรับฟังผลงานเพลงจากช่อง S.S.S Music - ขอให้มีความสุขกับการรับฟังครับ 🔴
-    </marquee>
-""", unsafe_allow_html=True)
-
-st.write("---")
+# 2. วิดีโอเพลง
 st.video("https://youtu.be/cbcuYnyr828?si=gCdCngKZztQVVZCe")
 
-# ✨ 3. ตัวหนังสือวิ่งคั่นวิดีโอช่อง (สีแดง)
-st.markdown("""
-    <marquee style="background-color: #FF0000; color: white; padding: 8px; font-weight: bold; border-radius: 5px; margin-bottom: 10px;">
-        📺 ยินดีต้อนรับสู่ช่อง อยู่นิ้งๆไม่เจ็บตัว - กดติดตามเพื่อรับชมคลิปใหม่ๆ ได้ที่นี่ 🎬
-    </marquee>
-""", unsafe_allow_html=True)
+# ✨ 3. ตัวหนังสือวิ่งคั่น YouTube 2 (สีแดง)
+st.markdown("<marquee style='background: #FF0000; color: white; padding: 8px; font-weight: bold; border-radius: 5px; margin-bottom: 10px;'>📺 ยินดีต้อนรับสู่ช่อง อยู่นิ้งๆไม่เจ็บตัว 🎬</marquee>", unsafe_allow_html=True)
 
+# 3. วิดีโอช่อง
 st.video("https://youtu.be/Bb3Jtsik3nY?si=Qyz3WtZLcxML3uF_")
 
-# --- [ 4. ส่วนแชร์เฟซบุ๊ก ] ---
+# --- [ 4. แชร์เฟซบุ๊ก & อัปโหลด ] ---
 share_url = "https://41g5.streamlit.app"
 facebook_share = f"https://www.facebook.com/sharer/sharer.php?u={share_url}"
 st.link_button("🔵 แชร์สถานีไปยัง Facebook", facebook_share, use_container_width=True)
 
-# --- [ 5. ส่วนอัปโหลดรูปและวิดีโอ ] ---
 st.write("---")
-
-# ✨ 4. ตัวหนังสือวิ่งคั่นส่วนอัปโหลด (สีน้ำเงิน)
-st.markdown("""
-    <marquee style="background-color: #0000FF; color: white; padding: 8px; font-weight: bold; border-radius: 5px;">
-        📸 ส่วนอัปโหลดรูปภาพและวิดีโอส่วนตัว - ทดสอบไฟล์ของคุณได้ที่นี่ 📸
-    </marquee>
-""", unsafe_allow_html=True)
+# ✨ 4. ตัวหนังสือวิ่งส่วนอัปโหลด (สีน้ำเงิน)
+st.markdown("<marquee style='background: #0000FF; color: white; padding: 8px; font-weight: bold; border-radius: 5px;'>📸 พื้นที่อัปโหลดรูปภาพและวิดีโอส่วนตัว 📸</marquee>", unsafe_allow_html=True)
 
 st.subheader("📸 อัปโหลดส่วนตัว")
-col_up1, col_up2 = st.columns(2)
-with col_up1:
-    uploaded_image = st.file_uploader("รูปภาพของคุณ", type=["jpg", "png"], key="img_final")
-    if uploaded_image: st.image(uploaded_image)
-with col_up2:
-    uploaded_video = st.file_uploader("วิดีโอของคุณ", type=["mp4"], key="vid_final")
-    if uploaded_video: st.video(uploaded_video)
+c1, c2 = st.columns(2)
+with c1:
+    up_img = st.file_uploader("อัปโหลดรูป", type=["jpg", "png"], key="img_final")
+    if up_img: st.image(up_img)
+with c2:
+    up_vid = st.file_uploader("อัปโหลดวิดีโอ", type=["mp4"], key="vid_final")
+    if up_vid: st.video(up_vid)
 
-# --- [ 6. แชท AI ] ---
+# --- [ 5. แชท AI ] ---
 st.write("---")
 st.subheader("💬 พื้นที่ระบายความในใจ (AI เพื่อนคู่คิด)")
-user_text = st.text_area("เพื่อนอยากระบายอะไรไหม?", placeholder="พิมพ์เรื่องที่เจอมาได้เลย...")
+user_input = st.text_area("อยากระบายอะไรไหมเพื่อน?", placeholder="พิมพ์เรื่องที่เจอมาได้เลย...")
 
 if st.button("ส่งความรู้สึก"):
-    if user_text:
+    if user_input:
         with st.spinner('กำลังฟังอย่างตั้งใจ...'):
-            reply = ask_ai_for_friend(user_text)
+            reply = ask_ai_for_friend(user_input)
             st.chat_message("assistant").write(reply)
             st.balloons()
     else:
         st.info("บอกอะไรเราหน่อยสิ")
 
-# --- [ 7. ปุ่มลูกเล่นและ LINE ] ---
+# --- [ 6. ลูกเล่น & ปิดท้าย ] ---
 st.write("---")
 col1, col2, col3 = st.columns(3)
 with col1:
-    if st.button('🎊 ฉลอง!'): st.balloons()
+    if st.button('🎊 ฉลอง'): st.balloons()
 with col2:
-    if st.button('❄️ หิมะตก'): st.snow()
+    if st.button('❄️ หิมะ'): st.snow()
 with col3:
     if st.button('🔔 ทักทาย'): st.toast('สวัสดีครับ!')
 
-# ✨ 5. ตัวหนังสือวิ่งปิดท้าย (สีเขียว Retro)
-st.markdown("""
-    <marquee style='color: #00FF00; font-family: Courier; font-size: 20px; background: #000; padding: 10px; border-radius: 10px; border: 1px solid #00FF00;'> 
-    🚀 ขอบคุณที่รับชมสถานีเพลงช่างใหญ่... อยู่นิ่งๆ ไม่เจ็บตัว... เพลงดี ดนตรีเพราะ... 🎧 🎶
-    </marquee>
-    """, unsafe_allow_html=True)
+# ✨ 5. ตัวหนังสือวิ่งปิดท้าย (สีเขียว)
+st.markdown("<marquee style='color: #00FF00; font-family: Courier; font-size: 20px; background: #000; padding: 10px; border-radius: 10px; border: 1px solid #00FF00;'>🚀 ขอบคุณที่รับชมสถานีเพลงช่างใหญ่... อยู่นิ่งๆ ไม่เจ็บตัว... 🎧 🎶</marquee>", unsafe_allow_html=True)
 
 line_link = "https://line.me/ti/p/e-8n-__If_" 
 st.link_button("🟢 แตะเพื่อแชทกับเรา (LINE)", line_link, use_container_width=True)
