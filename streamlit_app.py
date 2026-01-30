@@ -1,26 +1,27 @@
 import streamlit as st
-import streamlit.components.v1 as components
 import google.generativeai as genai
 
-# --- 1. ตั้งค่า API และโมเดล (ส่วนหัวใจ) ---
-if "GEMINI_API_KEY" in st.secrets:
-    genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
-else:
-    # หากรันในเครื่องตัวเอง ให้ใส่ API Key ตรงๆ เพื่อทดสอบได้
-    # genai.configure(api_key="ใส่_KEY_ตรงนี้_ถ้ายังไม่รันบน_Github")
-    st.warning("รอการเชื่อมต่อ API Key จากระบบ...")
+# --- [ 1. การดึง API Key ที่ซ่อนไว้ ] ---
+# ระบบจะไปดึงกุญแจจากหน้า Settings > Secrets ของ Streamlit Cloud
+try:
+    if "GEMINI_API_KEY" in st.secrets:
+        genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
+        model = genai.GenerativeModel('gemini-1.5-flash')
+    else:
+        st.error("⚠️ ยังไม่ได้ใส่ API Key ในระบบ Secrets ของ Streamlit!")
+except Exception as e:
+    st.error(f"เกิดข้อผิดพลาดในการเชื่อมต่อ: {e}")
 
-model = genai.GenerativeModel('gemini-1.5-flash')
-
+# ฟังก์ชันคุยกับ AI
 def ask_ai_for_friend(user_message):
-    prompt = f"คุณคือเพื่อนที่นิ่งสงบ สโลแกนคือ 'อยู่นิ่งๆ ไม่เจ็บตัว' เพื่อนระบายมาว่า: '{user_message}' ช่วยตอบกลับแบบสั้นๆ เข้าใจใจ ให้กำลังใจดีๆ"
+    prompt = f"คุณคือดีเจและเพื่อนที่นิ่งสงบ สโลแกนคือ 'อยู่นิ่งๆ ไม่เจ็บตัว' เพื่อนระบายมาว่า: '{user_message}' ช่วยตอบกลับแบบสั้นๆ นิ่งๆ ให้กำลังใจดีๆ"
     try:
         response = model.generate_content(prompt)
         return response.text
     except:
-        return "เราอยู่ตรงนี้ข้างๆ เธอนะ... (ระบบขัดข้องชั่วคราว)"
+        return "เราอยู่ตรงนี้ข้างๆ เธอนะ... (ตอนนี้ระบบแชทกำลังพักผ่อน)"
 
-# --- 2. ตั้งค่าหน้าตาแอป ---
+# --- [ 2. ตั้งค่าหน้าสถานีและ UI ] ---
 st.set_page_config(page_title="สถานีอยู่นิ่งๆ ไม่เจ็บตัว", page_icon="📻", layout="centered")
 
 st.markdown("""
@@ -43,62 +44,40 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# --- 3. ส่วนหัวสถานี ---
-try:
-    st.image("globe.jpg", width=250)
-except:
-    st.header("🌍")
-
+# ส่วนหัว
 st.markdown("<h2 style='color: #FFD700;'>📻 STATION: อยู่นิ่งๆ ไม่เจ็บตัว</h2>", unsafe_allow_html=True)
 
 st.markdown("""
     <marquee style="color: white; font-weight: bold; background: #050505; padding: 12px; border-radius: 10px; border: 1px solid #FFD700;">
-        📢 ยินดีต้อนรับเข้าสู่สถานี อยู่นิ่งๆ ไม่เจ็บตัว ...ทักแชทมาบอกเรื่องราวชีวิตได้เลย เดวจัดเพลงให้ฟังครับ! 🎵 🎧 ขอบคุณที่ติดตามรับฟังครับ ✨
+        📢 ยินดีต้อนรับเข้าสู่สถานี อยู่นิ่งๆ ไม่เจ็บตัว ...ทักแชทมาบอกเรื่องราวชีวิตได้เลย เดวจัดเพลงให้ฟังครับ! 🎵 🎧
     </marquee>
     """, unsafe_allow_html=True)
 
-st.write("---")
-
-# --- 4. ส่วนวิทยุ/เพลง YouTube ---
+# --- [ 3. ส่วนรายการเพลง YouTube ] ---
 st.subheader("📺 รายการเพลงแนะนำ")
 playlist_id = "PL6S211I3urvpt47sv8mhbexif2YOzs2gO"
 embed_url = f"https://www.youtube.com/embed/videoseries?list={playlist_id}"
 
 st.markdown(f"""
-    <iframe width="100%" height="450" src="{embed_url}" 
-    title="YouTube Playlist" frameborder="0" 
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-    allowfullscreen style="border-radius:15px; border: 2px solid #333;"></iframe>
+    <iframe width="100%" height="400" src="{embed_url}" 
+    frameborder="0" allowfullscreen style="border-radius:15px; border: 2px solid #333;"></iframe>
     """, unsafe_allow_html=True)
 
-# วิดีโอเด่น
+# --- [ 4. ส่วนไฮไลท์: แชทกับ AI ] ---
 st.write("---")
-st.markdown("<h3 style='color: #FF0000;'>🔴 ผลงานเพลงล่าสุด</h3>", unsafe_allow_html=True)
-st.video("https://youtu.be/cbcuYnyr828?si=gCdCngKZztQVVZCe")
+st.subheader("💬 พื้นที่ระบายความในใจ (AI เพื่อนคู่คิด)")
+user_text = st.text_area("เพื่อนอยากระบายอะไรไหม?", placeholder="พิมพ์เรื่องที่เจอมาได้เลย...")
 
-# --- 5. ส่วนพูดคุยกับ AI (จุดที่แก้ไข) ---
-st.write("---")
-st.subheader("💬 พื้นที่ระบายความในใจ")
-# สร้างกล่องรับข้อความ
-user_text = st.text_area("เพื่อนอยากบอกอะไรเราไหม? (พิมพ์ที่นี่นะ)", placeholder="วันนี้เจออะไรมา... บอกดีเจได้นะ")
-
-if st.button("ส่งความรู้สึกให้ AI"):
+if st.button("ส่งความรู้สึก"):
     if user_text:
         with st.spinner('กำลังฟังอย่างตั้งใจ...'):
             reply = ask_ai_for_friend(user_text)
             st.chat_message("assistant").write(reply)
-            st.balloons() # ใส่ลูกเล่นฉลองที่ได้ระบาย
+            st.balloons()
     else:
-        st.info("ลองพิมพ์อะไรบางอย่างก่อนกดปุ่มนะ")
+        st.info("บอกอะไรเราหน่อยสิ")
 
-# --- 6. ปุ่มลูกเล่นและช่องทางติดตาม ---
-st.write("---")
-col_sub1, col_sub2 = st.columns(2)
-with col_sub1:
-    st.link_button("📂 ดูวิดีโอทั้งหมด", "https://www.youtube.com/channel/UC6S211I3urvpt47sv8mhbexif2YOzs2gO/videos", use_container_width=True)
-with col_sub2:
-    st.link_button("🔴 กดติดตาม (SUB)", "https://www.youtube.com/channel/UC6S211I3urvpt47sv8mhbexif2YOzs2gO?sub_confirmation=1", use_container_width=True)
-
+# --- [ 5. แผงควบคุมและปุ่มลูกเล่น ] ---
 st.write("---")
 col_btn1, col_btn2, col_btn3 = st.columns(3)
 with col_btn1:
@@ -108,21 +87,19 @@ with col_btn2:
 with col_btn3:
     if st.button('🔔 ทักทาย'): st.toast('ยินดีต้อนรับครับ!', icon='🙏')
 
-# --- 7. ส่วนอัปโหลดรูปภาพ/วิดีโอ ---
+# --- [ 6. ส่วนอัปโหลดรูปภาพ/วิดีโอ ] ---
 st.write("---")
-st.subheader("📸 อัปโหลดส่วนตัว")
-col_up1, col_up2 = st.columns(2)
-with col_up1:
-    uploaded_image = st.file_uploader("รูปของคุณ", type=["jpg", "png"])
-    if uploaded_image: st.image(uploaded_image)
-with col_up2:
-    uploaded_video = st.file_uploader("วิดีโอของคุณ", type=["mp4"])
-    if uploaded_video: st.video(uploaded_video)
+uploaded_file = st.file_uploader("📸 แบ่งปันรูปภาพหรือวิดีโอของคุณ", type=["jpg", "png", "mp4"])
+if uploaded_file:
+    if uploaded_file.type.startswith('image'):
+        st.image(uploaded_file)
+    else:
+        st.video(uploaded_file)
 
-# --- 8. ส่วนปิดท้ายและปุ่ม LINE ---
+# --- [ 7. ส่วนท้ายและปุ่ม LINE ] ---
 st.write("---")
 line_link = "https://line.me/ti/p/e-8n-__If_" 
 st.link_button("🟢 แตะเพื่อแชทกับเรา (LINE)", line_link, use_container_width=True)
 
 st.sidebar.markdown('**สโลแกน:** "อยู่นิ่งๆ ไม่เจ็บตัว"')
-st.caption("© 2026 สถานีเพลงฟังสบายใจ | อยู่นิ่งๆ ไม่เจ็บตัว")
+st.caption("© 2026 สถานีเพลงช่างใหญ่ | อยู่นิ่งๆ ไม่เจ็บตัว")
