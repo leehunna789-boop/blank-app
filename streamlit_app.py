@@ -90,7 +90,7 @@ with c2:
 
 # --- [ 5. แชท AI ] ---
 st.write("---")
-st.subheader("💬 พื้นที่ระบายความในใจ (AI เพื่อนคู่คิด)")
+st.subheader("💬 พื้นที่ระบายความในใจ (อยู่นิ้งๆไม่เจ็บตัว เพื่อนคู่คิด)")
 user_input = st.text_area("อยากระบายอะไรไหมเพื่อน?", placeholder="พิมพ์เรื่องที่เจอมาได้เลย...")
 
 if st.button("ส่งความรู้สึก"):
@@ -113,7 +113,7 @@ with col3:
     if st.button('🔔 ทักทาย'): st.toast('สวัสดีครับ!')
 
 # ✨ 5. ตัวหนังสือวิ่งปิดท้าย (สีเขียว)
-st.markdown("<marquee style='color: #00FF00; font-family: Courier; font-size: 20px; background: #000; padding: 10px; border-radius: 10px; border: 1px solid #00FF00;'>🚀 ขอบคุณที่รับชมสถานีเพลงช่างใหญ่... อยู่นิ่งๆ ไม่เจ็บตัว... 🎧 🎶</marquee>", unsafe_allow_html=True)
+st.markdown("<marquee style='color: #050505; font-family: Courier; font-size: 20px; background: #000; padding: 10px; border-radius: 10px; border: 1px solid #00FF00;'>🚀 ขอบคุณที่รับชมสถานีเพลงช่างใหญ่... อยู่นิ่งๆ ไม่เจ็บตัว... 🎧 🎶</marquee>", unsafe_allow_html=True)
 
 line_link = "https://line.me/ti/p/e-8n-__If_" 
 st.link_button("🟢 แตะเพื่อแชทกับเรา (LINE)", line_link, use_container_width=True)
