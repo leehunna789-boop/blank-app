@@ -19,7 +19,7 @@ def ask_ai_for_friend(user_message):
     if model is None:
         return "ตอนนี้ช่างใหญ่ทำกุญแจหาย... (กรุณาเช็ค API Key ใน Secrets)"
     
-    prompt = f"คุณคือดีเจเพื่อนคู่คิด ชื่อช่างใหญ่ สโลแกนคือ 'อยู่นิ่งๆ ไม่เจ็บตัว' เพื่อนระบายว่า: '{user_message}' ตอบแบบนิ่งๆ กวนนิดๆ ให้กำลังใจดีๆ"
+    prompt = f"คุณคือดีเจเพื่อนคู่คิด ชื่ออยู่นิ้งๆไม่เจ็บตัว สโลแกนคือ 'อยู่นิ่งๆ ไม่เจ็บตัว' เพื่อนระบายว่า: '{user_message}' ตอบแบบนิ่งๆ กวนนิดๆ ให้กำลังใจดีๆ"
     try:
         response = model.generate_content(prompt)
         return response.text
@@ -29,7 +29,7 @@ def ask_ai_for_friend(user_message):
         return f"เรารับฟังอยู่นะ... (ระบบขัดข้องนิดหน่อย: {e})"
 
 # สุ่มคำคม
-quotes = ["นิ่งไว้เพื่อน... เดี๋ยวดีเอง", "ชีวิตมันสั้น... อย่าปั่นให้มันเหนื่อย", "อยู่นิ่งๆ ไม่เจ็บตัว เชื่อช่างใหญ่"]
+quotes = ["นิ่งไว้เพื่อน... เดี๋ยวดีเอง", "ชีวิตมันสั้น... อย่าปั่นให้มันเหนื่อย", "อยู่นิ่งๆ ไม่เจ็บตัว "]
 random_quote = random.choice(quotes)
 
 # --- [ 4. การตกแต่งหน้าตาด้วย CSS (เพิ่มไฟกระพริบเยอะๆ) ] ---
@@ -55,7 +55,7 @@ try:
 except:
     st.header("🌍")
 
-st.markdown("<h2 style='color: #FFD700;'>📀 STATION:🎉 อยู่นิ่งๆ ไม่เจ็บตัว 🎊</h2>", unsafe_allow_html=True)
+st.markdown("<h2 style='color: #FFD700;'>📀 STATION:🇹🇭 อยู่นิ่งๆ ไม่เจ็บตัว 🇹🇭</h2>", unsafe_allow_html=True)
 st.markdown(f'<div class="quote-box">✨ <b>คำคมวันนี้:</b> {random_quote}</div>', unsafe_allow_html=True)
 
 # ✨ ตัวหนังสือวิ่ง (ยังคงเดิม)
@@ -93,22 +93,22 @@ st.write("---")
 # YouTube Video 5 (ตัวอย่าง)
 st.markdown("<h3 class='flashing-text-yellow'>🌟 เพลงใหม่มาแรง 🌟</h3>", unsafe_allow_html=True)
 # **TODO: เปลี่ยนลิงก์ YouTube นี้เป็นวิดีโอที่คุณต้องการ**
-st.video("https://youtube.com/shorts/4529wwOotw4?si=XlE3rOogM_-8lh_j") # ลิงก์ตัวอย่าง (เพลง)
+st.video("https://youtu.be/MJiilKRrwMU?si=WL6PuSyZbPBgELgC") # ลิงก์ตัวอย่าง (เพลง)
 st.markdown("<marquee style='background: #FFFF00; color: black; padding: 8px; font-weight: bold; border-radius: 5px; margin-top: 10px;'>🟡 ห้ามพลาดเด็ดขาด 🟡</marquee>", unsafe_allow_html=True)
 st.write("---")
 
 
 # --- [ 6. แชท AI ] ---
-st.subheader("💬 พื้นที่ระบายความในใจ (ช่างใหญ่ AI)")
+st.subheader("💬 พื้นที่ระบายความในใจ (ผมอยู่นิ้งๆไม่เจ็บตัว)")
 user_input = st.text_area("อยากระบายอะไรไหมเพื่อน?", placeholder="พิมพ์เรื่องที่เจอมาได้เลย...", key="ai_input_main")
 
-if st.button("ส่งความรู้สึกให้ช่างใหญ่"):
+if st.button("ส่งความรู้สึกให้อยู่นิ้งๆไม่เจ็บตัว"):
     if user_input:
         with st.spinner('กำลังฟังอย่างตั้งใจ...'):
             reply = ask_ai_for_friend(user_input)
             st.chat_message("assistant").write(reply)
             st.balloons()
-            st.toast("555+ นิ่งไว้เพื่อน ช่างใหญ่ขำรอแล้ว!", icon="🤣")
+            st.toast("555+ นิ่งไว้เพื่อน 555ขำรอแล้ว!", icon="🤣")
             
             if 'msg_list' not in st.session_state: st.session_state.msg_list = []
             st.session_state.msg_list.append(user_input)
@@ -123,7 +123,7 @@ if 'msg_list' in st.session_state:
 # --- [ 7. อัปโหลดรูปภาพและวิดีโอ (เยอะขึ้น) & โซเชียล ] ---
 st.write("---")
 st.markdown("<marquee style='background: #0000FF; color: white; padding: 8px; font-weight: bold; border-radius: 5px;'>📸 พื้นที่อัปโหลดรูปภาพและวิดีโอส่วนตัว 📸</marquee>", unsafe_allow_html=True)
-st.subheader("📸 อัปโหลดส่วนตัว (สูงสุด 4 ไฟล์)")
+st.subheader("📸 อัปโหลดส่วนตัว ได้เลย (สูงสุด 4 ไฟล์)")
 
 # เพิ่มช่องอัปโหลดเป็น 2 แถว แถวละ 2 คอลัมน์
 col_img1, col_vid1 = st.columns(2)
@@ -142,7 +142,7 @@ with col_vid2:
     up_vid2 = st.file_uploader("วิดีโอ 2", type=["mp4"], key="vid_up2")
     if up_vid2: st.video(up_vid2)
 
-st.link_button("🔵 แชร์สถานีไปยัง Facebook", f"https://www.facebook.com/sharer/sharer.php?u=https://41g5.streamlit.app", use_container_width=True)
+st.link_button("🔵 แชร์สถานี อยู่นิ้งๆไม่เจ็บตัว ไปยัง Facebook", f"https://www.facebook.com/sharer/sharer.php?u=https://41g5.streamlit.app", use_container_width=True)
 
 # --- [ 8. ปุ่มลูกเล่น ] ---
 st.write("---")
@@ -157,7 +157,7 @@ with col4:
     if st.button('🤣 หัวเราะ'): st.toast('5555+ นิ่งไว้เพื่อน!', icon="🤣")
 
 # ปิดท้าย
-st.markdown("<marquee style='color: #050505; font-family: Courier; background: #000; padding: 10px; border-radius: 10px; border: 1px solid #00FF00;'>🚀 ขอบคุณที่รับชมสถานีเพลงช่างใหญ่... อยู่นิ่งๆ ไม่เจ็บตัว... 🎧</marquee>", unsafe_allow_html=True)
+st.markdown("<marquee style='color: #050505; font-family: Courier; background: #000; padding: 10px; border-radius: 10px; border: 1px solid #00FF00;'>🚀 ขอบคุณที่รับชมสถานีเพลง.อยู่นิ้งๆไม่เจ็บตัว... อยู่นิ่งๆ ไม่เจ็บตัว... 🎧</marquee>", unsafe_allow_html=True)
 st.link_button("🟢 แตะเพื่อแชทกับเรา (LINE)", "https://line.me/ti/p/e-8n-__If_", use_container_width=True)
 
 # Sidebar
