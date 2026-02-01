@@ -1,16 +1,41 @@
 import streamlit as st
 import google.generativeai as genai
+import streamlit as st
+import google.generativeai as genai
 
-# --- [ 1. เชื่อมต่อกุญแจลับ ] ---
-if "GEMINI_API_KEY" in st.secrets:
-    try:
-        genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
-        # ใช้ชื่อโมเดลแบบเต็มเพื่อกัน Error 404
-        model = genai.GenerativeModel('models/gemini-1.5-flash')
-    except Exception as e:
-        st.error(f"ระบบกุญแจขัดข้อง: {e}")
-else:
-    st.error("⚠️ ไม่พบกุญแจ! กรุณาใส่ GEMINI_API_KEY ในหน้า Secrets")
+# แทนที่จะใส่รหัสตรงๆ ให้เรียกใช้จากระบบ Secrets ของ Streamlit
+# มันจะไปดึงค่าจาก "ลิ้นชักลับ" ที่เราจะไปตั้งค่าในเว็บครับ
+try:
+    my_key = st.secrets["GEMINI_API_KEY"]
+    genai.configure(api_key=my_key)
+    model = genai.GenerativeModel('gemini-1.5-flash')
+except:
+    st.error("⚠️ ยังไม่ได้ใส่กุญแจลับ (API Key) ในระบบ Secrets ")
+    st.write("---")
+st.subheader("💬 อยากระบายอะไรไหมเพื่อน?")
+
+# ช่องรับข้อความ
+user_msg = st.text_area("พิมพ์ความรู้สึกที่นี่...", placeholder="เบื่อจริงต้องทำไง...")
+
+if st.button("ส่งความรู้สึก"):
+    if user_msg:
+        # แสดงข้อความตอบกลับแบบกวนๆ สไตล์ช่างใหญ่
+        st.balloons()
+        st.success("ช่างใหญ่ได้รับข้อความแล้ว! นิ่งไว้เพื่อน เดี๋ยวดีเอง 555")
+        
+        # เก็บข้อความไว้ในลิสต์โชว์หน้าจอ (รกๆ ดีครับ)
+        if 'messages' not in st.session_state:
+            st.session_state.messages = []
+        st.session_state.messages.append(user_msg)
+    else:
+        st.warning("พิมพ์อะไรมาหน่อยสิเพื่อน!")
+
+# โชว์สิ่งที่เพื่อนๆ พิมพ์มา (ความรกที่ช่างใหญ่ชอบ)
+if 'messages' in st.session_state:
+    st.write("---")
+    st.write("📌 **สิ่งที่เพื่อนๆ ระบายไว้:**")
+    for m in st.session_state.messages[::-1]: # เอาอันล่าสุดขึ้นก่อน
+        st.info(m)
 
 def ask_ai_for_friend(user_message):
     prompt = f"คุณคือดีเจเพื่อนคู่คิด สโลแกนคือ 'อยู่นิ่งๆ ไม่เจ็บตัว' เพื่อนระบายว่า: '{user_message}' ตอบแบบนิ่งๆ ให้กำลังใจดีๆ"
