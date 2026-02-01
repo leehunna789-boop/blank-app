@@ -1,7 +1,5 @@
 import streamlit as st
 import google.generativeai as genai
-import streamlit as st
-import google.generativeai as genai
 
 # แทนที่จะใส่รหัสตรงๆ ให้เรียกใช้จากระบบ Secrets ของ Streamlit
 # มันจะไปดึงค่าจาก "ลิ้นชักลับ" ที่เราจะไปตั้งค่าในเว็บครับ
@@ -29,6 +27,7 @@ if st.button("ส่งความรู้สึก"):
         st.session_state.messages.append(user_msg)
     else:
         st.warning("พิมพ์อะไรมาหน่อยสิเพื่อน!")
+        
 
 # โชว์สิ่งที่เพื่อนๆ พิมพ์มา (ความรกที่ช่างใหญ่ชอบ)
 if 'messages' in st.session_state:
@@ -101,6 +100,26 @@ facebook_share = f"https://www.facebook.com/sharer/sharer.php?u={share_url}"
 st.link_button("🔵 แชร์สถานีไปยัง Facebook", facebook_share, use_container_width=True)
 
 st.write("---")
+st.write("---")
+st.subheader("💬 พื้นที่ระบายความในใจ (เพื่อนคู่คิด)")
+
+# ใช้ key เพื่อป้องกันไอดีซ้ำ
+user_msg_input = st.text_area("อยากระบายอะไรไหมเพื่อน?", key="text_area_feeling")
+
+if st.button("ส่งความรู้สึก", key="submit_feeling_unique"):
+    if user_msg_input:
+        st.balloons()
+        if 'msg_list' not in st.session_state:
+            st.session_state.msg_list = []
+        st.session_state.msg_list.append(user_msg_input)
+        st.success("ช่างใหญ่รับทราบ! นิ่งไว้เพื่อน...")
+    else:
+        st.warning("พิมพ์อะไรมาหน่อยสิ!")
+
+# โชว์ข้อความที่ระบายไว้
+if 'msg_list' in st.session_state:
+    for m in st.session_state.msg_list[::-1]:
+        st.info(m)
 # ✨ 4. ตัวหนังสือวิ่งส่วนอัปโหลด (สีน้ำเงิน)
 st.markdown("<marquee style='background: #0000FF; color: white; padding: 8px; font-weight: bold; border-radius: 5px;'>📸 พื้นที่อัปโหลดรูปภาพและวิดีโอส่วนตัว 📸</marquee>", unsafe_allow_html=True)
 
