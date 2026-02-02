@@ -3,7 +3,7 @@ import google.generativeai as genai
 import random
 
 # --- [ 1. ตั้งค่าหน้าสถานี ] ---
-st.set_page_config(page_title="สถานีอยู่นิ่งๆ ไม่เจ็บตัว", page_icon="📻", layout="centered")
+st.set_page_config(page_title="สถานีอยู่นิ่งๆ ไม่เจ็บตัว", page_icon="🇹🇭📀", layout="centered")
 
 # --- [ 2. การตั้งค่าความปลอดภัย (Secrets) ] ---
 try:
@@ -72,7 +72,7 @@ st.markdown("<marquee style='background: #FFD700; color: black; padding: 8px; fo
 st.write("---")
 
 # YouTube Video 2
-st.markdown("<h3 class='flashing-text-yellow'>🎬 วิดีโอแนะนำจากช่างใหญ่ 🎬</h3>", unsafe_allow_html=True)
+st.markdown("<h3 class='flashing-text-yellow'>🎬 วิดีโอแนะนำ😁จากอยู่นิ้งๆไม่เจ็บตัว 🎬</h3>", unsafe_allow_html=True)
 st.video("https://youtu.be/cbcuYnyr828?si=gCdCngKZztQVVZCe")
 st.markdown("<marquee style='background: #FFFF00; color: black; padding: 8px; font-weight: bold; border-radius: 5px; margin-top: 10px;'>🟡 อย่าลืมกดติดตามช่องช่างใหญ่ด้วยนะ 🟡</marquee>", unsafe_allow_html=True)
 st.write("---")
@@ -84,10 +84,10 @@ st.markdown("<marquee style='background: #00FFFF; color: black; padding: 8px; fo
 st.write("---")
 
 # YouTube Video 4 (ตัวอย่าง)
-st.markdown("<h3 class='flashing-text-red'>🔥 โชว์สดสุดมันส์ 🔥</h3>", unsafe_allow_html=True)
+st.markdown("<h3 class='flashing-text-red'>🔥 เพลงเพราาะๆจัดให้ครับวันนี้ 🔥</h3>", unsafe_allow_html=True)
 # **TODO: เปลี่ยนลิงก์ YouTube นี้เป็นวิดีโอที่คุณต้องการ**
 st.video("https://youtu.be/cbcuYnyr828?si=YW9hXquVFRSa03gO") # ลิงก์ตัวอย่าง (Rickroll)
-st.markdown("<marquee style='background: #FF0000; color: white; padding: 8px; font-weight: bold; border-radius: 5px; margin-top: 10px;'>🔴 สนุกจนหยุดไม่อยู่ 🔴</marquee>", unsafe_allow_html=True)
+st.markdown("<marquee style='background: #FF0000; color: white; padding: 8px; font-weight: bold; border-radius: 5px; margin-top: 10px;'>🔴 สนุกสุดมันจนหยุดไม่อยู่ ที่นี้คือ อยู่นิ้งๆไม่เจ็บตัวว🔴</marquee>", unsafe_allow_html=True)
 st.write("---")
 
 # YouTube Video 5 (ตัวอย่าง)
@@ -161,5 +161,5 @@ st.markdown("<marquee style='color: #050505; font-family: Courier; background: #
 st.link_button("🟢 แตะเพื่อแชทกับเรา (LINE)", "https://line.me/ti/p/e-8n-__If_", use_container_width=True)
 
 # Sidebar
-st.sidebar.markdown('### <span class="on-air">● DJ บอล ON AIR</span>', unsafe_allow_html=True)
+st.sidebar.markdown('### <span class="on-air">● DJ ต๊ะ ON AIR</span>', unsafe_allow_html=True)
 st.sidebar.write('สโลแกน: **"อยู่นิ่งๆ ไม่เจ็บตัว"**')
